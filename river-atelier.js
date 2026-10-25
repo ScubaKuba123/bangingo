@@ -98,13 +98,13 @@
     }).filter(r=>r.visible);
     attentionStops.forEach(stop=>stop.element.style.removeProperty('--river-focus'));
     attentionStops=[...document.querySelectorAll('.world .photo,.trip-card,.direct-contact>a')].map((element,index)=>{
-      const r=element.getBoundingClientRect();return{element,id:element.dataset.id||element.getAttribute('href')||String(index),y:r.top+scrollY+r.height*.57,side:(r.left+r.right)/2<width/2?-1:1,radius:Math.max(135,Math.min(250,r.height*.65)),visible:r.width>0&&r.height>0};
+      const r=element.getBoundingClientRect(),side=(r.left+r.right)/2<width/2?-1:1;return{element,id:element.dataset.id||element.getAttribute('href')||String(index),y:r.top+scrollY+r.height*.57,side,edge:side<0?r.right:r.left,radius:Math.max(135,Math.min(250,r.height*.65)),visible:r.width>0&&r.height>0};
     }).filter(stop=>stop.visible).sort((a,b)=>a.y-b.y);
     if(!mobile){
-      // Alternate the destination when a pair of cards shares the same row.
-      const selected=[];let row=0;
+      // A paired row highlights the card on the nearer shore of this bend.
+      const selected=[];
       for(let i=0;i<attentionStops.length;){let end=i+1;while(end<attentionStops.length&&attentionStops[end].y-attentionStops[i].y<100)end++;
-        selected.push(attentionStops[i+(row%2?(end-i-1):0)]);i=end;row++;
+        selected.push(attentionStops.slice(i,end).reduce((near,stop)=>Math.abs(stop.edge-desktopAt(stop.y).x)<Math.abs(near.edge-desktopAt(near.y).x)?stop:near));i=end;
       }attentionStops=selected;
     }
     route=[];
