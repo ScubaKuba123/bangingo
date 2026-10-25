@@ -16,3 +16,13 @@ html[lang=ar] .offers-heading h2,html[lang=ar] .trip-copy h3,html[lang=ar] .pack
 @media(prefers-reduced-motion:reduce){.trip-card,.trip-image img{transition:none}.trip-card:hover,.trip-card:hover img{transform:none}}
 @media(max-width:680px){.package-page .mobile-contact{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.package-page .mobile-contact a{justify-content:center;text-align:center;padding:14px 10px}}
 html[data-theme-locked] dialog .outline{color:var(--ocean)}html[data-theme-locked] dialog .outline:hover{background:#153e500a}html[data-theme-locked] dialog .detail-inclusions{color:var(--muted)}
+
+
+/* Clear three-step service explanation without changing the River canvas/section layout. */
+.service-steps{list-style:none;margin:0 0 49px;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;max-width:1100px}
+.service-steps li{display:flex;gap:16px;align-items:flex-start;min-width:0;padding-top:18px;border-top:1px solid #153e5036}
+.service-steps-index{font:600 11px/1.6 Manrope,Arial,sans-serif;letter-spacing:.14em;color:var(--clay)}
+.service-steps strong{display:block;font:500 clamp(21px,2.15vw,30px)/1.08 Cormorant,Georgia,serif;color:var(--ocean);overflow-wrap:anywhere}
+.service-steps p{margin:10px 0 0;font:400 12px/1.7 Manrope,Arial,sans-serif;color:var(--muted)}
+html[lang=ar] .service-steps strong,html[lang=ja] .service-steps strong,html[lang=zh] .service-steps strong{font-family:Manrope,Arial,sans-serif;font-size:19px;line-height:1.6}
+@media(max-width:900px){.service-steps{grid-template-columns:1fr;gap:16px;margin-bottom:34px}.service-steps li{padding-top:13px}.service-steps strong{font-size:25px}.service-steps p{font-size:12px}}
