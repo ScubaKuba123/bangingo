@@ -13,6 +13,11 @@
     if(Array.isArray(raw))selected=new Set(raw.map(id=>id==='burlesque-show'?'event-hosts':id).filter(id=>byId.has(id)));
     motionPreference=localStorage.getItem('bangingo-river-v2-motion');
   } catch {}
+  // The portfolio cover has its own play/pause control; keep saved visitor choices intact.
+  if(window.self!==window.top&&new URLSearchParams(location.search).get('preview')==='portfolio'){
+    locale='pl';selected=new Set();motionPreference=null;
+    document.documentElement.classList.add('portfolio-cover');
+  }
   if(!dictionaries[locale])locale='pl';
   let motion=motionPreference===null?!reduce.matches:motionPreference==='true';
   const t=key=>dictionaries[locale][key];

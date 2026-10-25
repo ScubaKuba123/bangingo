@@ -83,3 +83,7 @@
  [data-atelier] .world-controls{justify-content:flex-start}
 }
 
+/* The portfolio supplies accessible controls outside its decorative, scaled cover. */
+html.portfolio-cover{scrollbar-width:none}
+html.portfolio-cover::-webkit-scrollbar{display:none}
+html.portfolio-cover .world-controls{display:none}

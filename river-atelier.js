@@ -8,7 +8,14 @@
   yachtCanvas.id='yacht-canvas';yachtCanvas.setAttribute('aria-hidden','true');canvas.after(yachtCanvas);
   const yachtContext=yachtCanvas.getContext('2d',{alpha:true});
   let width=0,height=0,dpr=1,mobile=false,anchors=[],route=[],texture=null,flowLayers=[],textureScale=.65,phase=0,boatY=0,heading=0,frame=0,last=0,dirty=true;
-  const moving=()=>!document.body.classList.contains('still')&&!document.hidden;
+  const portfolioPreview=window.self!==window.top&&new URLSearchParams(location.search).get('preview')==='portfolio';
+  let previewPlaying=false,previewReady=false;
+  const moving=()=>!document.hidden&&(portfolioPreview?previewPlaying:!document.body.classList.contains('still'));
+  if(portfolioPreview)addEventListener('message',event=>{
+    if(event.source!==parent||event.data?.type!=='bangingo:preview-motion'||typeof event.data.playing!=='boolean')return;
+    previewPlaying=event.data.playing;wake();
+    parent.postMessage({type:'bangingo:preview-state',playing:previewPlaying,phase},event.origin);
+  });
   const grain=i=>{const v=Math.sin(i*127.1+311.7)*43758.5453;return v-Math.floor(v);};
   function rawAt(y){let i=0;while(i<anchors.length-2&&y>anchors[i+1].y)i++;const a=anchors[i],b=anchors[i+1];if(!a||!b)return{x:width*.6,width:width*.3};const prev=anchors[Math.max(0,i-1)],next=anchors[Math.min(anchors.length-1,i+2)],span=Math.max(1,b.y-a.y),t=Math.min(1,Math.max(0,(y-a.y)/span)),m0=(b.x-prev.x)/Math.max(1,b.y-prev.y),m1=(next.x-a.x)/Math.max(1,next.y-a.y);return{x:(2*t*t*t-3*t*t+1)*a.x+(t*t*t-2*t*t+t)*span*m0+(-2*t*t*t+3*t*t)*b.x+(t*t*t-t*t)*span*m1,width:a.width+(b.width-a.width)*t*t*(3-2*t)};}
   function at(y){const index=Math.max(0,Math.min(route.length-2,(y-ROUTE_START)/ROUTE_STEP)),i=Math.floor(index),t=index-i,a=route[i],b=route[i+1];if(!a||!b)return{...rawAt(y),distance:y};return{x:a.x+(b.x-a.x)*t,width:a.width+(b.width-a.width)*t,distance:a.distance+(b.distance-a.distance)*t};}
@@ -63,7 +70,7 @@
       ctx.drawImage(texture,0,Math.min(sy,th-sh),tw,sh,p.x-p.width/2,dy,p.width,step);
       for(let i=0;i<flowLayers.length;i++){
         const layer=flowLayers[i],ripple=Math.sin(base/59-phase*.9+i)*.35;
-        const flowY=((base-phase*layer.speed*(mobile?1.6:1)+Math.sin(base/103-phase*.65+i)*1.8)%th+th)%th;
+        const flowY=((base-phase*layer.speed*(mobile?1.6:1)*(portfolioPreview?1.5:1)+Math.sin(base/103-phase*.65+i)*1.8)%th+th)%th;
         ctx.drawImage(layer.image,0,Math.min(flowY,th-sh),tw,sh,p.x-p.width/2+ripple,dy,p.width,step);
       }
     }
@@ -100,7 +107,9 @@
     canvas.dataset.boatLength=String(BOAT_LENGTH);canvas.dataset.flowPhase=phase.toFixed(2);
     yachtCanvas.dataset.bounds=JSON.stringify({x:boatX-boxWidth/2,y:boatY-scrollY-boxHeight/2,width:boxWidth,height:boxHeight});
   }
-  function render(){ctx.clearRect(0,0,width,height);renderWater();drawYacht();canvas.dataset.variant='atelier';canvas.dataset.material=texture?'ready':'loading';canvas.dataset.viewport=width+'x'+height;}
+  function render(){ctx.clearRect(0,0,width,height);renderWater();drawYacht();canvas.dataset.variant='atelier';canvas.dataset.material=texture?'ready':'loading';canvas.dataset.viewport=width+'x'+height;
+    if(portfolioPreview&&!previewReady&&texture&&boat.complete&&boat.naturalWidth){previewReady=true;parent.postMessage({type:'bangingo:preview-ready'},'*');}
+  }
   function tick(now){frame=0;if(dirty||now-last>40){if(moving())phase+=Math.min((now-last)/1000,.06);last=now;render();dirty=false;}if(moving())frame=requestAnimationFrame(tick);}
   function wake(){dirty=true;if(!document.hidden&&!frame)frame=requestAnimationFrame(tick);else if(document.hidden)render();}
   water.onload=prepareTexture;boat.onload=wake;foam.onload=wake;water.src='assets/atelier-water.webp';boat.src='assets/river-yacht.webp';foam.src='assets/atelier-wake.webp';
