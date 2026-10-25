@@ -1,6 +1,6 @@
 // No dependencies, no rewriting production source. Creates an isolated,
 // allowlisted static output directory for Cloudflare Pages deployment.
-import { existsSync, readdirSync, mkdirSync, rmSync, statSync, copyFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readdirSync, mkdirSync, rmSync, lstatSync, copyFileSync, writeFileSync } from 'node:fs';
 import { resolve, join, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -12,7 +12,7 @@ const excludeRoot = new Set(['vercel.json', 'package.json', 'package-lock.json',
 const MAX_FILE_SIZE = 25 * 1024 * 1024; // Cloudflare Pages single-asset limit.
 
 function copyPublic(from, to) {
-  const stats = statSync(from);
+  const stats = lstatSync(from);
   if (stats.isSymbolicLink?.()) throw new Error('Symbolic links are not deployable: ' + from);
   if (stats.isDirectory()) {
     mkdirSync(to, { recursive: true });
