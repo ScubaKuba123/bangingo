@@ -26,9 +26,9 @@
   function imageMarkup(image,hero=false,index=0){
     if(image==='sunset')return '<img src="assets/sunset-poster-800.webp" srcset="assets/sunset-poster-800.webp 800w, assets/sunset-poster-1920.webp 1920w" sizes="(max-width:680px) 48vw, 35vw" width="1920" height="1080" alt="Sunset on a yacht" lang="en" decoding="async">';
     const photo=photos[image],variants=photo.variants;
-    return `<img src="assets/${image}-md.webp" srcset="${variants.map(v=>'assets/'+v.file+' '+v.width+'w').join(', ')}" sizes="(max-width:680px) ${hero?'75':'90'}vw, 36vw" width="${photo.dimensions[0]}" height="${photo.dimensions[1]}" alt="${photo.alt}" lang="en" ${hero?'':'loading="lazy"'} ${hero&&index===0?'fetchpriority="high"':''} decoding="async">`;
+    return `<img src="assets/${image}-md.webp" srcset="${variants.map(v=>'assets/'+v.file+' '+v.width+'w').join(', ')}" sizes="(max-width:680px) ${hero?'75':'90'}vw, 36vw" width="${photo.dimensions[0]}" height="${photo.dimensions[1]}" alt="${photo.alt}" lang="en" style="object-position:${photo.position||'50% 50%'}" ${hero?'':'loading="lazy"'} ${hero&&index===0?'fetchpriority="high"':''} decoding="async">`;
   }
-  const scenes={intro:[['private-party','yacht-energy'],['vip-club','night-women'],['city-tour','gdansk']],golden:[['private-party'],['vip-transfer'],['polish-dinner']],dark:[['event-hosts'],['vip-club'],['vodka-tasting']],beyond:[['balloon-flight'],['offroad-adventure'],['supercar-track']]};
+  const scenes={intro:[['private-party','sail-celebration'],['vip-club','night-editorial'],['city-tour','golden-gdansk']],golden:[['private-party'],['vip-transfer'],['polish-dinner']],dark:[['event-hosts'],['vip-club'],['vodka-tasting']],beyond:[['balloon-flight'],['offroad-adventure'],['supercar-track']]};
   $$('[data-scene]').forEach(world=>scenes[world.dataset.scene].forEach(([id,image],index)=>{
     const button=document.createElement('button');button.type='button';button.className='photo';button.dataset.id=id;
     button.dataset.depth=[1,.65,1.3,.8][index];button.dataset.angle=[-3,2,-2][index];
@@ -49,7 +49,7 @@
   function fillExperience(id){
     activeId=id;const item=itemCopy(id),photo=photos[item.image],img=experience.querySelector('.detail-image');
     experience.classList.toggle('text-detail',!photo);img.hidden=!photo;
-    if(photo){img.src=`assets/${item.image}-md.webp`;img.srcset=photo.variants.map(v=>'assets/'+v.file+' '+v.width+'w').join(', ');img.sizes='(max-width:680px) 92vw, 470px';img.alt=photo.alt;img.lang='en';}else{img.removeAttribute('src');img.removeAttribute('srcset');img.alt='';}
+    if(photo){img.src=`assets/${item.image}-md.webp`;img.srcset=photo.variants.map(v=>'assets/'+v.file+' '+v.width+'w').join(', ');img.sizes='(max-width:680px) 92vw, 470px';img.alt=photo.alt;img.lang='en';img.style.objectPosition=photo.position||'50% 50%';}else{img.removeAttribute('src');img.removeAttribute('srcset');img.alt='';}
     $('#experience-title').textContent=item.title;$('.detail-category').textContent=item.category;$('.detail-description').textContent=item.text;
     const list=$('.detail-inclusions');list.replaceChildren();[t('detail1'),t('detail2')].forEach(line=>{const li=document.createElement('li');li.textContent=line;list.append(li);});
     updateSelection();

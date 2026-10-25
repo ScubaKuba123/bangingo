@@ -5,9 +5,9 @@ window.BANGINGO_OFFERS = (() => {
     {id:'business-trip',image:'transfer',group:'business'},
     {id:'corporate-event',image:'dining',group:'business'},
     {id:'bachelor-weekend',image:'speed-bold',group:'celebrate'},
-    {id:'ladies-paradise',image:'night-women',group:'celebrate'},
-    {id:'party-animal',image:'yacht-energy',group:'celebrate'},
-    {id:'love-surprise',image:'sunset-party',group:'leisure'},
+    {id:'ladies-paradise',image:'cocktail-evening',group:'celebrate'},
+    {id:'party-animal',image:'sail-celebration',group:'celebrate'},
+    {id:'love-surprise',image:'baltic-yacht',group:'leisure'},
     {id:'bromance',image:'offroad',group:'leisure'}
   ];
   const copy={};

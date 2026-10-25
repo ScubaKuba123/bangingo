@@ -9,7 +9,7 @@
   const copy=id=>catalogue.copy[locale][id];
   function photo(p,eager=false){
     const asset=window.VIP_PHOTOS[p.image];
-    return `<img src="assets/${p.image}-md.webp" srcset="${asset.variants.map(v=>'assets/'+v.file+' '+v.width+'w').join(', ')}" sizes="${active?'(max-width:760px) 100vw, 50vw':'(max-width:680px) 75vw, (max-width:1000px) 40vw, 27vw'}" width="${asset.dimensions[0]}" height="${asset.dimensions[1]}" loading="${eager?'eager':'lazy'}" decoding="async" alt="">`;
+    return `<img src="assets/${p.image}-md.webp" srcset="${asset.variants.map(v=>'assets/'+v.file+' '+v.width+'w').join(', ')}" sizes="${active?'(max-width:760px) 100vw, 50vw':'(max-width:680px) 75vw, (max-width:1000px) 40vw, 27vw'}" width="${asset.dimensions[0]}" height="${asset.dimensions[1]}" loading="${eager?'eager':'lazy'}" decoding="async" alt="" style="object-position:${asset.position||'50% 50%'}">`;
   }
   const mount=$('#enquiry');
   if(mount){

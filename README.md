@@ -20,7 +20,7 @@
 - A five-field enquiry plus package selection. It builds an email draft for the visitor to send, and never claims that an enquiry was sent automatically. Form details are not saved in localStorage or submitted to the locale endpoint.
 - Fifteen activity ideas and a personal selection that prepares an email message. Contact is exclusively through contact@bangingo.com; no telephone number or WhatsApp action is shown.
 - Eight independent backgrounds and eight colour palettes in Bonsai Color Choice Kit.
-- Local responsive images, self-hosted fonts and an optional yacht film.
+- Local responsive images, subject-aware crops, self-hosted fonts and an optional yacht film. Organic photo outlines follow the river; on phones, photos alternate banks and the river crosses the clear spaces between them.
 
 ## Run locally
 
@@ -40,7 +40,7 @@ Activity descriptions are programme inspiration, with availability and pricing a
 
 ## Media and rights
 
-Brand assets were provided for this project. Existing photographic source records are retained in `docs/photo-provenance.js`; photography uses the respective Pexels or Unsplash terms. Generated assets include the decorative yacht, Atelier water/wake and event-host imagery. The decorative river is not a geographic map. Manrope and Cormorant OFL notices are retained in `assets/`. No blanket licence is granted for third-party media or brand assets by publishing this repository.
+Brand assets were provided for this project. Existing photographic source records are retained in `docs/photo-provenance.js` and the six-photo editorial refresh in `docs/photo-upgrade-2026-10-25.json`; photography uses the respective Pexels or Unsplash terms. Generated assets include the decorative yacht, Atelier water/wake and event-host imagery. The decorative river is not a geographic map. Manrope and Cormorant OFL notices are retained in `assets/`. No blanket licence is granted for third-party media or brand assets by publishing this repository.
 
 ## Verification
 
