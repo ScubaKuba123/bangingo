@@ -23,15 +23,16 @@
   ].map((background,index)=>({...background,index:index+1}));
   window.BANGINGO_BACKGROUNDS=backgrounds;
   const defaults=document.documentElement.dataset;
+  const locked=Object.hasOwn(defaults,'themeLocked');
   let paletteId='coastal',backgroundId=defaults.defaultBackground||'paper';
   const params=new URLSearchParams(location.search);
   if(!defaults.defaultBackground)try{backgroundId=localStorage.getItem('bangingo-background')||backgroundId;}catch{}
-  backgroundId=params.get('background')||backgroundId;
+  backgroundId=locked?defaults.defaultBackground:(params.get('background')||backgroundId);
   if(!backgrounds.some(b=>b.id===backgroundId))backgroundId='paper';
   document.documentElement.dataset.background=backgroundId;
   const mixHex=(a,b,t)=>'#'+[1,3,5].map(i=>Math.round(parseInt(a.slice(i,i+2),16)*(1-t)+parseInt(b.slice(i,i+2),16)*t).toString(16).padStart(2,'0')).join('');
   function apply(id, persist=true) {
-    const p=palettes.find(p=>p.id===id)||palettes[0];
+    const p=palettes.find(p=>p.id===(locked?defaults.defaultPalette:id))||palettes[0];
     paletteId=p.id;const dark=backgrounds.find(b=>b.id===backgroundId).dark;
     const theme=dark?{...p,paper:backgroundId==='dusk'?'#132432':'#0a1821',surface:'#1a303c',ocean:'#f5eee4',muted:'#c0d0d5',clay:p.sand}:{...p,muted:backgroundId==='glow'?mixHex(p.muted,p.ocean,.22):p.muted};
     document.documentElement.dataset.tone=dark?'dark':'light';
@@ -45,7 +46,7 @@
     return p;
   }
   function background(id,persist=true){
-    const mode=backgrounds.find(b=>b.id===id)||backgrounds[0];backgroundId=mode.id;document.documentElement.dataset.background=backgroundId;
+    const mode=backgrounds.find(b=>b.id===(locked?defaults.defaultBackground:id))||backgrounds[0];backgroundId=mode.id;document.documentElement.dataset.background=backgroundId;
     if(persist)try{localStorage.setItem('bangingo-background',backgroundId);}catch{}
     apply(paletteId,false);window.dispatchEvent(new CustomEvent('bangingo:background',{detail:mode}));return mode;
   }

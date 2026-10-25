@@ -1,33 +1,38 @@
-# Bangingo — Sunrise Rose
+# Bangingo — Pearl Aurora
 
-**Not your ordinary night.** A multilingual experience website for Gdańsk, Sopot and Gdynia, created by BonsAI Studio.
+**Business. Leisure. Party?** Private trips and events in Poland, with Tricity experiences, created by BonsAI Studio. **Not your ordinary night** remains the brand motto.
 
-[Open Sunrise Rose](https://bangingo-client-choice.vercel.app/sunrise-rose.html) · [Bonsai Color Choice Kit](https://bangingo-client-choice.vercel.app/color-kit.html?version=atelier&palette=rose&background=sunset) · [BonsAI portfolio](https://itbonsai.pl/realizacje#bangingo)
+[Open the final website](https://bangingo-client-choice.vercel.app/) · [Earlier design choices](https://bangingo-client-choice.vercel.app/choose.html) · [Bonsai Color Choice Kit](https://bangingo-client-choice.vercel.app/color-kit.html) · [BonsAI portfolio](https://itbonsai.pl/realizacje#bangingo)
 
-![Bangingo Sunrise Rose — actual website capture](docs/sunrise-rose.webp)
+![Bangingo Pearl Aurora — actual website capture](docs/pearl-aurora.png)
 
 ## Selected edition
 
-`sunrise-rose.html` opens River Atelier with the Champagne Rosé palette and Sunrise Rose background. Its defaults override previously saved colour choices; explicit `palette` and `background` URL parameters can still select another combination. Other editions and the review page remain available.
+`index.html` and `pearl-aurora.html` are the final customer edition. They use Coastal Pearl colours and the Pearl Aurora background permanently, ignoring saved colour choices and colour parameters in the URL. `sunrise-rose.html` is retained as a compatible entry for existing portfolio links and now serves the same final edition. The colour kit and earlier variants remain separate review tools.
 
 ## Features
 
 - A scroll-driven river with layered water flow and a constant-size yacht.
 - Responsive layouts, reduced-motion support and a motion toggle.
 - Polish, English, German, French, Spanish, Italian, Portuguese, Arabic, Japanese and Chinese.
+- Automatic language from the Vercel IP-country header, with browser-language fallback. An explicit visitor choice takes priority and persists; selecting Auto returns to country detection. No GPS permission or third-party geolocation API is used. Country depends on the connection location (including VPNs); unsupported countries fall back to browser language, then English. Multilingual countries use the browser preference among their supported languages.
+- Seven packages with individual pages: Business Trip, Corporate Event, Bachelor / Stag Weekend, Ladies’ Paradise, Party Animal, Love Surprise and Bromance.
+- A six-field enquiry plus package selection. It builds an email or WhatsApp draft for the visitor to send, and never claims that an enquiry was sent automatically. Form details are not saved in localStorage or submitted to the locale endpoint.
 - Fifteen activity ideas and a personal selection that prepares a WhatsApp or email message.
 - Eight independent backgrounds and eight colour palettes in Bonsai Color Choice Kit.
 - Local responsive images, self-hosted fonts and an optional yacht film.
 
 ## Run locally
 
-Serve this directory with any static HTTP server. For example, with Python installed:
+Use Vercel CLI for both the static website and the small locale endpoint:
 
 ```sh
-python -m http.server 4398 --bind 127.0.0.1
+vercel dev
 ```
 
-Then open `http://127.0.0.1:4398/sunrise-rose.html`. There is no build step, package installation or secret configuration. `vercel.json` describes the existing static preview deployment; provider account state is excluded.
+Open the local address printed by the CLI. The country header is supplied on Vercel deployments; local development falls back to browser language. A plain static server also renders the site but has no country endpoint. There is no frontend build step, third-party runtime dependency or secret configuration. Provider account state is excluded from this repository.
+
+Run the language, API and content checks with `node --test tests/locale.test.mjs`. Country detection follows [Vercel's geolocation headers](https://vercel.com/kb/guide/geo-ip-headers-geolocation-vercel-functions); `/api/locale` uses `private, no-store` to prevent one visitor's locale being cached for another.
 
 ## Project notes
 
@@ -39,4 +44,4 @@ Brand assets were provided for this project. Existing photographic source record
 
 ## Verification
 
-The Sunrise Rose entry is checked in responsive browser viewports. These checks do not constitute physical-device certification. The river is an animated canvas composition, not a fluid simulation.
+The final entry is checked at 375, 768 and 1440 CSS pixels in all ten languages; all seven package pages are checked in ten languages at phone width. Browser checks include the enquiry draft, language persistence, Auto, simulated PL/JP country responses, the film, selection dialog and moving water. These checks do not constitute physical-device certification. The river is an animated canvas composition, not a fluid simulation. The existing temporary deployment remains noindex.
