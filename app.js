@@ -6,19 +6,19 @@
   const arrow='<svg aria-hidden="true"><use href="#arrow"/></svg>';
   const selectionKey='bangingo-river-v2-selection';
   const reduce=matchMedia('(prefers-reduced-motion: reduce)'),mobile=matchMedia('(max-width:680px)');
-  let locale=window.BangingoLanguage.current.locale, selected=new Set(), activeId, lastFocus, timer, motionPreference=null;
+  let locale=window.BangingoLanguage.current.locale, selected=new Set(), activeId, lastFocus, timer;
   try {
     const raw=JSON.parse(localStorage.getItem(selectionKey)||'[]');
     if(Array.isArray(raw))selected=new Set(raw.map(id=>id==='burlesque-show'?'event-hosts':id).filter(id=>byId.has(id)));
-    motionPreference=localStorage.getItem('bangingo-river-v2-motion');
   } catch {}
-  // The portfolio cover has its own play/pause control; keep saved visitor choices intact.
+  // Keep the portfolio cover independent of a visitor's selected experiences.
   if(window.self!==window.top&&new URLSearchParams(location.search).get('preview')==='portfolio'){
-    selected=new Set();motionPreference=null;
+    selected=new Set();
     document.documentElement.classList.add('portfolio-cover');
   }
   if(!dictionaries[locale])locale='pl';
-  let motion=motionPreference===null?!reduce.matches:motionPreference==='true';
+  // Reduced motion applies to collage/scroll effects; the river flows independently.
+  let motion=!reduce.matches;
   const t=key=>dictionaries[locale][key];
   const itemCopy=id=>({...byId.get(id),...window.BANGINGO_ITEMS[locale][id]});
   const textOnly=html=>html.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
@@ -109,17 +109,15 @@
     }
   }
   function schedule(){if(!scheduled){scheduled=true;requestAnimationFrame(paint);}}
-  function motionLabel(){$('#motion').setAttribute('aria-pressed',String(motion));$('#motion').innerHTML=t(motion?'motionOn':'motionOff')+' <span class="toggle"></span>';}
-  function setMotion(){document.body.classList.toggle('still',!motion);motionLabel();schedule();}
-  $('#motion').addEventListener('click',()=>{motion=!motion;motionPreference=String(motion);try{localStorage.setItem('bangingo-river-v2-motion',motionPreference);}catch{}setMotion();});
-  reduce.addEventListener('change',()=>{if(motionPreference===null){motion=!reduce.matches;setMotion();}});
+  function setMotion(){document.body.classList.toggle('still',!motion);schedule();}
+  reduce.addEventListener('change',()=>{motion=!reduce.matches;setMotion();});
   addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);addEventListener('pointermove',event=>{if(!motion||mobile.matches||event.pointerType==='touch')return;px=(event.clientX/innerWidth-.5)*2;py=(event.clientY/innerHeight-.5)*2;schedule();},{passive:true});
   function translate(){
     document.documentElement.lang=locale;document.documentElement.dir=locale==='ar'?'rtl':'ltr';$('#language').value=window.BangingoLanguage.current.mode==='auto'?'auto':locale;$('.language').dataset.code=locale.toUpperCase();
     $$('[data-t]').forEach(el=>el.innerHTML=t(el.dataset.t));$$('[data-label]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.label)));
     $$('.photo').forEach(el=>{const id=el.dataset.id,isFilm=id==='film',x=isFilm?{category:t('filmNav'),title:t('play')}:itemCopy(id);el.querySelector('small').textContent=x.category;el.querySelector('strong').textContent=x.title;el.setAttribute('aria-label',x.category+' — '+x.title);});
     $('.header .your-night').setAttribute('aria-label',t('yourNight'));$('#language').setAttribute('aria-label',t('language'));video.setAttribute('aria-label',textOnly(t('filmTitle')));
-    renderCatalogue();updateSelection();motionLabel();filmState();if(collection.open)renderCollection();if(experience.open)fillExperience(activeId);schedule();
+    renderCatalogue();updateSelection();filmState();if(collection.open)renderCollection();if(experience.open)fillExperience(activeId);schedule();
   }
   window.BangingoLanguage.bind($('#language'));
   window.BangingoLanguage.subscribe(state=>{locale=state.locale;translate();});

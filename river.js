@@ -4,7 +4,6 @@
   const ctx = canvas.getContext('2d', {alpha:true});
   if (!ctx) return;
   const real = document.body.dataset.river === 'river';
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
   const water = new Image(), yacht = new Image();
   let w=0,h=0,dpr=1,points=[],anchors=[],page=0,frame=0,last=0,phase=0,boatY=0,dirty=true;
   let isMobile=false,pattern=null;
@@ -13,7 +12,7 @@
   const colorStops=[[0,[255,145,129]],[.025,[231,173,198]],[.13,[173,164,229]],[.31,[66,128,196]],[.48,[13,81,132]],[.65,[18,132,158]],[.83,[56,192,194]],[.975,[124,218,203]],[1,[250,133,123]]];
   function colorAt(t){let i=1;while(i<colorStops.length-1&&t>colorStops[i][0])i++;const a=colorStops[i-1],b=colorStops[i],u=(t-a[0])/(b[0]-a[0]);return `rgb(${a[1].map((c,k)=>Math.round(c+(b[1][k]-c)*u)).join(',')})`;}
   const bandColors=Array.from({length:58},(_,i)=>colorAt(i/57));
-  const enabled=()=>!document.body.classList.contains('still')&&!document.hidden;
+  const enabled=()=>!document.hidden;
   function add(y,x,width){anchors.push({y,x:x*w,width:width*w});}
   function size(){
     w=document.documentElement.clientWidth;h=innerHeight;dpr=Math.min(devicePixelRatio||1,1.5);isMobile=w<=680;
@@ -117,7 +116,7 @@
   addEventListener('scroll',wake,{passive:true});addEventListener('resize',size,{passive:true});
   new ResizeObserver(size).observe(document.querySelector('main'));
   if(document.body)new MutationObserver(wake).observe(document.body,{attributes:true,attributeFilter:['class']});
-  reduce.addEventListener('change',wake);document.addEventListener('visibilitychange',()=>{if(document.hidden&&frame){cancelAnimationFrame(frame);frame=0;}else wake();});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden&&frame){cancelAnimationFrame(frame);frame=0;}else wake();});
   addEventListener('bangingo:palette',e=>{palette=e.detail;wake();});
   document.fonts.ready.then(size);size();
 })();

@@ -10,7 +10,7 @@
   let width=0,height=0,dpr=1,mobile=false,anchors=[],route=[],texture=null,flowLayers=[],textureScale=.65,phase=0,boatY=0,heading=0,frame=0,last=0,dirty=true;
   const portfolioPreview=window.self!==window.top&&new URLSearchParams(location.search).get('preview')==='portfolio';
   let previewPlaying=false,previewReady=false;
-  const moving=()=>!document.hidden&&(portfolioPreview?previewPlaying:!document.body.classList.contains('still'));
+  const moving=()=>!document.hidden&&(!portfolioPreview||previewPlaying);
   if(portfolioPreview)addEventListener('message',event=>{
     if(event.source!==parent||event.data?.type!=='bangingo:preview-motion'||typeof event.data.playing!=='boolean')return;
     previewPlaying=event.data.playing;wake();
@@ -114,8 +114,6 @@
   function wake(){dirty=true;if(!document.hidden&&!frame)frame=requestAnimationFrame(tick);else if(document.hidden)render();}
   water.onload=prepareTexture;boat.onload=wake;foam.onload=wake;water.src='assets/atelier-water.webp';boat.src='assets/river-yacht.webp';foam.src='assets/atelier-wake.webp';
   addEventListener('resize',resize,{passive:true});addEventListener('scroll',wake,{passive:true});new ResizeObserver(resize).observe(document.querySelector('main'));
-  document.querySelector('#motion')?.addEventListener('click',wake);
-  matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',wake);
   addEventListener('bangingo:palette',wake);document.addEventListener('visibilitychange',()=>{if(document.hidden&&frame){cancelAnimationFrame(frame);frame=0;}else wake();});
   document.fonts.ready.then(resize);resize();
 })();

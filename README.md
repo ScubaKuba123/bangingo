@@ -13,7 +13,7 @@
 ## Features
 
 - A scroll-driven river with layered water flow and a constant-size yacht.
-- Responsive layouts, reduced-motion support and a motion toggle.
+- Responsive layouts and continuously flowing water, with no water toggle. Reduced-motion preferences still apply to collage and scrolling effects. Rendering pauses in hidden tabs; the portfolio cover retains its own visibility and play/pause controls.
 - Polish, English, German, French, Spanish, Italian, Portuguese, Arabic, Japanese and Chinese.
 - Automatic language from the Vercel IP-country header, with browser-language fallback. An explicit visitor choice takes priority and persists; selecting Auto returns to country detection. No GPS permission or third-party geolocation API is used. Country depends on the connection location (including VPNs); unsupported countries fall back to browser language, then English. Multilingual countries use the browser preference among their supported languages.
 - Seven packages with individual pages: Business Trip, Corporate Event, Bachelor / Stag Weekend, Ladies’ Paradise, Party Animal, Love Surprise and Bromance.
