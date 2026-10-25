@@ -94,3 +94,7 @@ dialog{background:#173c50}.detail-description,.collection-intro,.empty{color:#d6
 /* Keep the title clear of collage edges on portrait tablets. */
 @media(min-width:681px) and (max-width:1100px){.intro h1{font-size:8vw}.intro .photo:nth-child(1){width:27%}.intro-copy p:not(.eyebrow){max-width:330px;font-size:14px}}
 @media(min-width:681px) and (max-width:1100px) and (orientation:portrait){.intro-copy{top:34%}.intro h1{font-size:9.5vw}.intro .photo:nth-child(1){top:13%;height:22%;width:32%}.intro .photo:nth-child(2){top:13%;height:22%;width:33%}.intro .photo:nth-child(3){height:25%;bottom:-1%;width:33%}.intro .photo:nth-child(4){height:29%;bottom:-2%;width:31%}}
+
+/* Keep the email address prominent after removing phone contact. */
+.mobile-contact a:only-child{grid-column:1/-1}
+@media(max-width:680px){.mobile-contact{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}}

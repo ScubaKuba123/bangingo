@@ -65,13 +65,13 @@
   });
   $('#collection-contact').addEventListener('click',()=>{collection.close();goTo('contact');});
   $('#download').addEventListener('click',()=>{
-    const lines=['BANGINGO — NOT YOUR ORDINARY NIGHT','GDAŃSK · SOPOT · GDYNIA','',...[...selected].map((id,i)=>{const x=itemCopy(id);return `${i+1}. ${x.category} — ${x.title}\n${x.text}`;}),'',t('availability'),t('localNote'),'','+48 501 147 124','contact@bangingo.com'];
+    const lines=['BANGINGO — NOT YOUR ORDINARY NIGHT','GDAŃSK · SOPOT · GDYNIA','',...[...selected].map((id,i)=>{const x=itemCopy(id);return `${i+1}. ${x.category} — ${x.title}\n${x.text}`;}),'',t('availability'),t('localNote'),'','contact@bangingo.com'];
     const url=URL.createObjectURL(new Blob(['\uFEFF'+lines.join('\r\n')],{type:'text/plain;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download='BANGINGO-MY-NIGHT.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),5000);toast(t('saved'));
   });
   function message(){const mood=['class','chaos','surprise'].indexOf($('input[name=mood]:checked').value);return [t('messageHello'),'Gdańsk · Sopot · Gdynia',`${t('messageMood')}: ${t('mood'+mood)}`,`${t('messageGuests')}: ${$('#guests').value}`,`${t('selectedLabel')}: ${[...selected].map(id=>itemCopy(id).category).join(', ')||t('mood2')}`,t('messageEnd')].join('\n');}
   function updateContact(){
     $('#signal-selection').textContent=selected.size?[...selected].map(id=>itemCopy(id).category).join(' · '):t('empty');
-    const draft=encodeURIComponent(message());$('#signal-whatsapp').href='https://wa.me/48501147124?text='+draft;$('.quick-whatsapp').href=$('#signal-whatsapp').href;
+    const draft=encodeURIComponent(message());
     $('#signal-email').href='mailto:contact@bangingo.com?subject='+encodeURIComponent('Bangingo — '+t('yourNight'))+'&body='+draft;
   }
   $$('input[name=mood]').forEach(input=>input.addEventListener('change',updateContact));$('#guests').addEventListener('change',updateContact);

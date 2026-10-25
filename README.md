@@ -17,8 +17,8 @@
 - Polish, English, German, French, Spanish, Italian, Portuguese, Arabic, Japanese and Chinese.
 - Automatic language from the Vercel IP-country header, with browser-language fallback. An explicit visitor choice takes priority and persists; selecting Auto returns to country detection. No GPS permission or third-party geolocation API is used. Country depends on the connection location (including VPNs); unsupported countries fall back to browser language, then English. Multilingual countries use the browser preference among their supported languages.
 - Seven packages with individual pages: Business Trip, Corporate Event, Bachelor / Stag Weekend, Ladies’ Paradise, Party Animal, Love Surprise and Bromance.
-- A six-field enquiry plus package selection. It builds an email or WhatsApp draft for the visitor to send, and never claims that an enquiry was sent automatically. Form details are not saved in localStorage or submitted to the locale endpoint.
-- Fifteen activity ideas and a personal selection that prepares a WhatsApp or email message.
+- A five-field enquiry plus package selection. It builds an email draft for the visitor to send, and never claims that an enquiry was sent automatically. Form details are not saved in localStorage or submitted to the locale endpoint.
+- Fifteen activity ideas and a personal selection that prepares an email message. Contact is exclusively through contact@bangingo.com; no telephone number or WhatsApp action is shown.
 - Eight independent backgrounds and eight colour palettes in Bonsai Color Choice Kit.
 - Local responsive images, self-hosted fonts and an optional yacht film.
 

@@ -13,7 +13,7 @@
   }
   const mount=$('#enquiry');
   if(mount){
-    mount.innerHTML=`<form class="enquiry-form"><h3 data-offer="formTitle"></h3><label class="form-wide"><span data-offer="package"></span><select name="package"></select></label><label><span data-offer="phone"></span><input name="phone" type="tel" autocomplete="tel" dir="ltr" maxlength="40" required></label><label><span data-offer="email"></span><input name="email" type="email" autocomplete="email" dir="ltr" maxlength="254" required></label><label><span data-offer="date"></span><input name="date" type="date" required></label><label><span data-offer="guests"></span><input name="guests" type="number" min="1" max="999" inputmode="numeric" value="2" required></label><label class="form-wide"><span data-offer="city"></span><input name="city" autocomplete="address-level2" maxlength="100" required></label><label class="form-wide"><span data-offer="description"></span><textarea name="description" rows="4" maxlength="1500" required></textarea></label><button class="solid form-wide" type="submit" data-offer="prepare"></button><p class="enquiry-note form-wide" data-offer="privacy"></p><div class="draft-result form-wide" hidden><p role="status" data-offer="ready"></p><pre class="draft-preview"></pre><div class="draft-actions"><a class="solid draft-wa" target="_blank" rel="noopener noreferrer">WhatsApp ↗</a><a class="outline draft-email" data-offer="emailAction"></a></div></div></form>`;
+    mount.innerHTML=`<form class="enquiry-form"><h3 data-offer="formTitle"></h3><label class="form-wide"><span data-offer="package"></span><select name="package"></select></label><label class="form-wide"><span data-offer="email"></span><input name="email" type="email" autocomplete="email" dir="ltr" maxlength="254" required></label><label><span data-offer="date"></span><input name="date" type="date" required></label><label><span data-offer="guests"></span><input name="guests" type="number" min="1" max="999" inputmode="numeric" value="2" required></label><label class="form-wide"><span data-offer="city"></span><input name="city" autocomplete="address-level2" maxlength="100" required></label><label class="form-wide"><span data-offer="description"></span><textarea name="description" rows="4" maxlength="1500" required></textarea></label><button class="solid form-wide" type="submit" data-offer="prepare"></button><p class="enquiry-note form-wide" data-offer="privacy"></p><div class="draft-result form-wide" hidden><p role="status" data-offer="ready"></p><pre class="draft-preview"></pre><div class="draft-actions"><a class="solid draft-email" data-offer="emailAction"></a></div></div></form>`;
     const now=new Date();
     const min=[now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-');
     mount.querySelector('[name=date]').min=min;
@@ -23,10 +23,9 @@
   function draft(){
     const data=new FormData(mount.querySelector('form'));
     const packageName=data.get('package')?copy(data.get('package')).title:ui('tailored');
-    const text=['BANGINGO — '+ui('subject'),...['package','phone','email','date','city','guests','description'].map(key=>`${ui(key)}: ${key==='package'?packageName:data.get(key)}`)].join('\n\n');
+    const text=['BANGINGO — '+ui('subject'),...['package','email','date','city','guests','description'].map(key=>`${ui(key)}: ${key==='package'?packageName:data.get(key)}`)].join('\n\n');
     mount.querySelector('.draft-preview').textContent=text;
     mount.querySelector('.draft-email').href='mailto:contact@bangingo.com?subject='+encodeURIComponent(ui('subject')+' — '+packageName)+'&body='+encodeURIComponent(text);
-    mount.querySelector('.draft-wa').href='https://wa.me/48501147124?text='+encodeURIComponent(text);
     mount.querySelector('.draft-result').hidden=false;
   }
   function render(){
