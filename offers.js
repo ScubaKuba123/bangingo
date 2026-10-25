@@ -38,13 +38,22 @@
       all('[data-t]').forEach(node=>{node.innerHTML=window.BANGINGO_LOCALES[locale][node.dataset.t];});
       $('.language').dataset.code=locale.toUpperCase();
       $('#language').setAttribute('aria-label',window.BANGINGO_LOCALES[locale].language);
-      document.title=c.title+' — Bangingo';
+      document.title=c.title+' · '+ui('packageSeoSuffix');
+      const pageDescription=$('meta[name="description"]');
+      if(pageDescription)pageDescription.setAttribute('content',c.intro.length>166?c.intro.slice(0,163).trimEnd()+'…':c.intro);
       $('#package-title').textContent=c.title;
       $('#package-tagline').textContent=c.tagline;
       $('#package-intro').textContent=c.intro;
       $('#package-story').textContent=c.story;
       $('#package-ideas').innerHTML=c.ideas.map(idea=>`<li>${escape(idea)}</li>`).join('');
       if(!$('#package-photo').firstElementChild)$('#package-photo').innerHTML=photo(active,true);
+    } else {
+      document.title=ui('seoTitle');
+      const metaDescription=$('meta[name="description"]');
+      if(metaDescription)metaDescription.setAttribute('content',ui('seoDescription'));
+      const ogTitle=$('meta[property="og:title"]'),ogDescription=$('meta[property="og:description"]');
+      if(ogTitle)ogTitle.setAttribute('content',document.title);
+      if(ogDescription)ogDescription.setAttribute('content',ui('seoDescription'));
     }
     all('[data-offer]').forEach(node=>{node.innerHTML=ui(node.dataset.offer);});
     if(mount){
