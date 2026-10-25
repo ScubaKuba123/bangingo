@@ -2,12 +2,15 @@
   'use strict';
   const canvas=document.querySelector('#river-canvas'),ctx=canvas.getContext('2d',{alpha:true});
   if(!ctx)return;
+  const navigation=window.BangingoRiverNavigation,{clamp,ease}=navigation;
   const water=new Image(),boat=new Image(),foam=new Image();
   const BOAT_LENGTH=124,ROUTE_STEP=4,ROUTE_START=-500;
   const yachtCanvas=document.createElement('canvas');
   yachtCanvas.id='yacht-canvas';yachtCanvas.setAttribute('aria-hidden','true');canvas.after(yachtCanvas);
   const yachtContext=yachtCanvas.getContext('2d',{alpha:true});
-  let width=0,height=0,dpr=1,mobile=false,route=[],mobileBanks=[],landmarks=[],texture=null,flowLayers=[],textureScale=.65,phase=0,boatY=0,heading=0,frame=0,last=0,dirty=true;
+  let width=0,height=0,dpr=1,mobile=false,route=[],mobileBanks=[],landmarks=[],obstacles=[],attentionStops=[],texture=null,flowLayers=[],textureScale=.65,phase=0,boatY=0,boatX=0,heading=0,frame=0,last=0,lastWater=0,dirty=true;
+  let hull=navigation.hull(BOAT_LENGTH,49),poseReady=false;
+  const laneOffsets=[-.27,0,.27];
   const portfolioPreview=window.self!==window.top&&new URLSearchParams(location.search).get('preview')==='portfolio';
   let previewPlaying=false,previewReady=false;
   const moving=()=>!document.hidden&&(!portfolioPreview||previewPlaying);
@@ -20,7 +23,11 @@
   function at(y){
     const index=Math.max(0,Math.min(route.length-2,(y-ROUTE_START)/ROUTE_STEP)),i=Math.floor(index),t=index-i,a=route[i],b=route[i+1];
     if(!a||!b)return{x:width*.5,width:width*.16,distance:y};
-    return{x:a.x+(b.x-a.x)*t,width:a.width+(b.width-a.width)*t,distance:a.distance+(b.distance-a.distance)*t};
+    return{x:a.x+(b.x-a.x)*t,width:a.width+(b.width-a.width)*t,distance:a.distance+(b.distance-a.distance)*t,
+      curve:(a.curve||0)+((b.curve||0)-(a.curve||0))*t,
+      flow0:(a.flow0||0)+((b.flow0||0)-(a.flow0||0))*t,
+      flow1:(a.flow1||0)+((b.flow1||0)-(a.flow1||0))*t,
+      flow2:(a.flow2||0)+((b.flow2||0)-(a.flow2||0))*t};
   }
   function mobileAt(y){
     let center=.61,turn=0;
@@ -30,8 +37,8 @@
       center=a.x+(b.x-a.x)*t*t*(3-2*t);
       if(a.x!==b.x)turn=Math.pow(Math.sin(Math.PI*t),.65);
     }
-    const focus=emphasisAt(y),base=Math.max(60/width,.145+.022*Math.sin(y/187)+.012*Math.sin(y/389));
-    const poolBreadth=base+(.25-base)*focus.weight,breadth=Math.max(poolBreadth,88*turn/width);
+    const focus=emphasisAt(y),base=Math.max(72/width,.145+.022*Math.sin(y/187)+.012*Math.sin(y/389));
+    const poolBreadth=base+(.25-base)*focus.weight,breadth=Math.max(poolBreadth,116*turn/width);
     // Wider pools move slightly away from the occupied bank, keeping text dry.
     center=.5+(center-.5)*(1+(poolBreadth-.14)*3);
     const side=Math.max(-1,Math.min(1,(center-.5)/.08));
@@ -85,17 +92,43 @@
       mobileBanks.sort((a,b)=>a.y-b.y);
       if(mobileBanks.length){mobileBanks.unshift({y:ROUTE_START-500,x:mobileBanks[0].x});mobileBanks.push({y:document.documentElement.scrollHeight+1000,x:mobileBanks.at(-1).x});}
     }
+    const protectedContent='.intro-copy,.chapter-copy,.world .photo,.trip-card,.programme-group,.film-heading,.film-frame,.film-caption,.contact-copy,.contact-section>.contact-tools,.offers-heading>*,.programme-heading>*,.programme-note,.chapter-bottom>*,.scroll-cue,footer>*';
+    obstacles=[...document.querySelectorAll(protectedContent)].map(element=>{
+      const r=element.getBoundingClientRect();return{left:r.left,right:r.right,top:r.top+scrollY,bottom:r.bottom+scrollY,side:(r.left+r.right)/2<width/2?-1:1,visible:r.width>0&&r.height>0&&r.width<width*.57};
+    }).filter(r=>r.visible);
+    attentionStops.forEach(stop=>stop.element.style.removeProperty('--river-focus'));
+    attentionStops=[...document.querySelectorAll('.world .photo,.trip-card,.direct-contact>a')].map((element,index)=>{
+      const r=element.getBoundingClientRect();return{element,id:element.dataset.id||element.getAttribute('href')||String(index),y:r.top+scrollY+r.height*.57,side:(r.left+r.right)/2<width/2?-1:1,radius:Math.max(135,Math.min(250,r.height*.65)),visible:r.width>0&&r.height>0};
+    }).filter(stop=>stop.visible).sort((a,b)=>a.y-b.y);
+    if(!mobile){
+      // Alternate the destination when a pair of cards shares the same row.
+      const selected=[];let row=0;
+      for(let i=0;i<attentionStops.length;){let end=i+1;while(end<attentionStops.length&&attentionStops[end].y-attentionStops[i].y<100)end++;
+        selected.push(attentionStops[i+(row%2?(end-i-1):0)]);i=end;row++;
+      }attentionStops=selected;
+    }
     route=[];
     for(let y=ROUTE_START;y<document.documentElement.scrollHeight+600;y+=ROUTE_STEP){
       const p=mobile?mobileAt(y):desktopAt(y);
       const previous=route.at(-1);
       route.push({y,x:p.x,width:p.width,distance:previous?previous.distance+Math.hypot(p.x-previous.x,ROUTE_STEP):0});
     }
+    // Integrate travel time for each stream. Outer bends and narrower reaches run
+    // faster, without a time-dependent seam where neighbouring velocities change.
+    for(let i=0;i<route.length;i++){
+      const p=route[i],before=at(p.y-18),after=at(p.y+18),slope=(after.x-before.x)/36;
+      p.curve=(after.x-2*p.x+before.x)/324/Math.pow(1+slope*slope,1.5);
+      for(let lane=0;lane<3;lane++){
+        const key='flow'+lane,previous=route[i-1],offset=laneOffsets[lane];
+        const speed=clamp(Math.pow((mobile?85:width*.15)/p.width,.28),.75,1.4)*(1-clamp(p.curve*p.width*offset*2,-.3,.3));
+        p[key]=previous?previous[key]+Math.hypot(p.x+p.width*offset-previous.x-previous.width*offset,ROUTE_STEP)/speed:0;
+      }
+    }
     canvas.dataset.routing='editorial-pools';
     canvas.dataset.channelBounds=JSON.stringify({centerMin:Math.min(...route.map(p=>p.x))/width,centerMax:Math.max(...route.map(p=>p.x))/width,leftBankMin:Math.min(...route.map(p=>p.x-p.width/2))/width,rightBankMax:Math.max(...route.map(p=>p.x+p.width/2))/width});
     canvas.dataset.channelWidths=JSON.stringify({min:Math.min(...route.map(p=>p.width)),max:Math.max(...route.map(p=>p.width))});
     canvas.dataset.landmarks=JSON.stringify(landmarks.map(p=>({id:p.id,y:Math.round(p.y),width:Math.round(at(p.y).width)})));
-    textureScale=mobile?.18:.76;wake();
+    textureScale=mobile?.18:.76;poseReady=false;wake();
   }
   function prepareTexture(){
     const w=water.naturalWidth,h=water.naturalHeight,blend=Math.round(h*.13),period=h-blend;
@@ -115,53 +148,96 @@
     const tw=texture.width,th=texture.height,step=(mobile?2:1)/dpr;
     // Draw on the device-pixel grid. Overlapping translucent strips create visible banding.
     for(let dy=0;dy<height;dy+=step){const y=dy+scrollY,p=at(y);
-      const base=p.distance/textureScale,sy=(base%th+th)%th,sh=Math.min(8,(at(y+step).distance-p.distance)/textureScale||step/textureScale);
+      const next=at(y+step),base=p.distance/textureScale,sy=(base%th+th)%th,sh=Math.min(8,(next.distance-p.distance)/textureScale||step/textureScale);
       ctx.drawImage(texture,0,Math.min(sy,th-sh),tw,sh,p.x-p.width/2,dy,p.width,step);
       for(let i=0;i<flowLayers.length;i++){
-        const layer=flowLayers[i],ripple=Math.sin(base/59-phase*.9+i)*.35;
-        const flowY=((base-phase*layer.speed*(mobile?1.6:1)*(portfolioPreview?1.5:1)+Math.sin(base/103-phase*.65+i)*1.8)%th+th)%th;
-        ctx.drawImage(layer.image,0,Math.min(flowY,th-sh),tw,sh,p.x-p.width/2+ripple,dy,p.width,step);
+        const layer=flowLayers[i],stream=p['flow'+i]/textureScale,flowHeight=Math.min(12,Math.max(.1,(next['flow'+i]-p['flow'+i])/textureScale));
+        const flowY=((stream-phase*layer.speed*(mobile?1.6:1)*(portfolioPreview?1.5:1))%th+th)%th;
+        ctx.drawImage(layer.image,0,Math.min(flowY,th-flowHeight),tw,flowHeight,p.x-p.width/2,dy,p.width,step);
       }
     }
-    // Small slow highlights, dispersed through the sunlit half of the channel.
-    const drift=phase*8,block=Math.floor((scrollY-drift)/400);for(let b=block;b<=block+Math.ceil(height/400);b++)for(let i=0;i<18;i++){const seed=b*31+i,yy=b*400+grain(seed+41)*400+drift,p=at(yy),x=p.x+p.width*(.05+grain(seed+12)*.21),alpha=Math.pow(.5+.5*Math.sin(phase*.65+seed),5)*.12;ctx.fillStyle=`rgba(255,241,204,${alpha})`;ctx.beginPath();ctx.ellipse(x,yy-scrollY,.6+grain(seed)*1.3,.35,Math.PI*.18,0,Math.PI*2);ctx.fill();}
+    drawCurrentHighlights();
   }
-  function drawYacht(){
+  function streamPoint(travel,lane){
+    const key='flow'+lane;let low=0,high=route.length-1;
+    while(high-low>1){const mid=(low+high)>>1;if(route[mid][key]<travel)low=mid;else high=mid;}
+    const a=route[low],b=route[high],t=clamp((travel-a[key])/Math.max(.01,b[key]-a[key]),0,1),y=a.y+(b.y-a.y)*t;
+    return{y,...at(y)};
+  }
+  function drawCurrentHighlights(){
+    ctx.save();ctx.lineCap='round';ctx.lineWidth=mobile?.65:.85;
+    for(let lane=0;lane<3;lane++){
+      const key='flow'+lane,drift=phase*flowLayers[lane].speed*textureScale*(mobile?1.6:1)*(portfolioPreview?1.5:1),spacing=mobile?98:115;
+      const first=Math.floor((at(scrollY-40)[key]-drift)/spacing),end=Math.ceil((at(scrollY+height+40)[key]-drift)/spacing);
+      for(let n=first;n<=end;n++){
+        const seed=n*17+lane*31,travel=n*spacing+grain(seed)*spacing*.6+drift,offset=laneOffsets[lane]+(grain(seed+4)-.5)*.1;
+        const length=8+grain(seed+9)*19,alpha=.035+.055*Math.pow(.5+.5*Math.sin(phase*.7+seed),2);
+        ctx.strokeStyle=`rgba(228,248,239,${alpha})`;ctx.beginPath();
+        for(let k=0;k<=5;k++){const p=streamPoint(travel-length*k/5,lane),x=p.x+p.width*offset;k?ctx.lineTo(x,p.y-scrollY):ctx.moveTo(x,p.y-scrollY);}ctx.stroke();
+      }
+    }ctx.restore();
+  }
+  function guidanceAt(y){
+    let sum=0,direction=0,strength=0,nearest=null;
+    for(const stop of attentionStops){const weight=Math.exp(-.5*((y-stop.y)/stop.radius)**2);sum+=weight;direction+=stop.side*weight;if(weight>strength){strength=weight;nearest=stop;}}
+    const p=at(y),turnAllowance=1-clamp(Math.abs(p.curve)*160,0,.85);
+    const offset=(sum?direction/sum:0)*Math.min(mobile?14:48,p.width*.2)*strength*turnAllowance;
+    return{x:p.x+offset,strength,nearest};
+  }
+  function courseAt(y){return Math.atan2(guidanceAt(y+BOAT_LENGTH*.4).x-guidanceAt(y-BOAT_LENGTH*.4).x,BOAT_LENGTH*.8);}
+  function safePose(y,x,angle){
+    return navigation.pose({y,x,angle,points:hull,water:at,obstacles:obstacles.filter(item=>item.bottom>y-90&&item.top<y+90)});
+  }
+  function drawYacht(dt=1/60){
     const ctx=yachtContext;ctx.clearRect(0,0,width,height);
     if(!boat.complete||!boat.naturalWidth||!texture)return;
     const safeTop=(document.querySelector('.header')?.offsetHeight||88)+BOAT_LENGTH*.65;
     const safeBottom=height-(mobile?165:100);
     const screenTarget=Math.max(safeTop,Math.min(safeBottom,height*.59));
-    const target=scrollY+screenTarget;boatY=!boatY||!moving()?target:target-Math.max(-height*.07,Math.min(height*.07,(target-boatY)*.8));
-    boatY=scrollY+Math.max(safeTop,Math.min(safeBottom,boatY-scrollY));
-    const p=at(boatY),a=at(boatY+30),before=at(boatY-30),angle=Math.atan2(a.x-before.x,60),length=BOAT_LENGTH,beam=length*boat.naturalWidth/boat.naturalHeight;
-    heading=moving()?heading+(angle-heading)*.25:angle;
-    const boxWidth=Math.abs(Math.cos(heading))*beam+Math.abs(Math.sin(heading))*length,boxHeight=Math.abs(Math.sin(heading))*beam+Math.abs(Math.cos(heading))*length;
-    // Reserve text clearance even while the heading catches up after a fast jump.
-    const leftLimit=8;
-    const boatX=Math.max(leftLimit+boxWidth/2,Math.min(width-boxWidth/2-8,p.x));
+    const target=scrollY+screenTarget,jumped=!poseReady||Math.abs(target-boatY)>height*.45;
+    boatY=jumped?target:ease(boatY,target,dt,.13);
+    boatY=scrollY+clamp(boatY-scrollY,safeTop,safeBottom);
+    const guide=guidanceAt(boatY),course=courseAt(boatY),length=BOAT_LENGTH,beam=length*boat.naturalWidth/boat.naturalHeight;
+    const wantedHeading=jumped?course:ease(heading,course,dt,.1),wantedX=jumped?guide.x:ease(boatX,guide.x,dt,.12);
+    let pose=safePose(boatY,wantedX,wantedHeading)||safePose(boatY,guide.x,course),recovery=0;
+    // A sudden anchor jump may put the bow across an unusually tight bend.
+    // Find a nearby navigable position, never shrink the yacht or draw it on land.
+    for(let step=8;!pose&&step<height;step+=8)for(const direction of [-1,1]){
+      const y=boatY+direction*step;if(y<scrollY+safeTop||y>scrollY+safeBottom)continue;
+      pose=safePose(y,guidanceAt(y).x,courseAt(y));if(pose){recovery=direction*step;break;}
+    }
+    if(!pose){yachtCanvas.dataset.safe='false';return;}
+    boatX=pose.x;boatY=pose.y;heading=pose.angle;poseReady=true;
     // Photographic foam follows the channel and dissipates gradually behind the stern.
     ctx.save();ctx.lineCap='round';
     const trail=length*1.7;
-    if(foam.complete&&foam.naturalWidth){const step=1/dpr,start=boatY-length*.37;
+    if(foam.complete&&foam.naturalWidth){const step=1/dpr,start=boatY-Math.cos(heading)*length*.43,sternX=boatX-Math.sin(heading)*length*.43,offset=boatX-at(boatY).x;
       for(let dy=0;dy<trail;dy+=step){const t=dy/trail,yy=start-dy,p=at(yy);if(yy<scrollY||yy>scrollY+height)continue;
-        const sy=Math.max(0,Math.min(foam.naturalHeight-3,t*(foam.naturalHeight-3)+Math.sin(phase*1.1-t*12)*6)),wakeWidth=Math.min(beam*(1.15+1.8*t),p.width*.72);
-        ctx.globalAlpha=.44*Math.pow(1-t,1.65);ctx.drawImage(foam,0,sy,foam.naturalWidth,foam.naturalHeight*step/trail,p.x-wakeWidth/2,yy-scrollY,wakeWidth,step);
+        const sy=Math.max(0,Math.min(foam.naturalHeight-3,t*(foam.naturalHeight-3)+Math.sin(phase*1.1-t*12)*6)),wakeWidth=Math.min(beam*(.9+1.7*t),p.width*.68);
+        const current=p.x+offset*Math.exp(-dy/100),stern=sternX-Math.sin(heading)*dy,center=current+(stern-current)*Math.exp(-dy/35);
+        const wakeX=clamp(center,p.x-p.width*.44+wakeWidth/2,p.x+p.width*.44-wakeWidth/2);
+        ctx.globalAlpha=.4*Math.pow(1-t,1.65);ctx.drawImage(foam,0,sy,foam.naturalWidth,foam.naturalHeight*step/trail,wakeX-wakeWidth/2,yy-scrollY,wakeWidth,step);
       }
     }
     ctx.globalAlpha=1;
-    ctx.translate(boatX+Math.sin(phase*.6)*.5,boatY-scrollY);ctx.rotate(Math.PI-heading+Math.sin(phase*.5)*.006);
+    ctx.translate(boatX,boatY-scrollY);ctx.rotate(Math.PI-heading);
     ctx.shadowColor='#062c36a0';ctx.shadowBlur=9;ctx.shadowOffsetX=5;ctx.shadowOffsetY=-6;ctx.drawImage(boat,-beam/2,-length/2,beam,length);ctx.restore();
     canvas.dataset.position=String(Math.round(boatY));
     canvas.dataset.boatLength=String(BOAT_LENGTH);canvas.dataset.flowPhase=phase.toFixed(2);
-    yachtCanvas.dataset.bounds=JSON.stringify({x:boatX-boxWidth/2,y:boatY-scrollY-boxHeight/2,width:boxWidth,height:boxHeight});
+    const bounds=navigation.bounds(pose,hull);bounds.y-=scrollY;
+    yachtCanvas.dataset.bounds=JSON.stringify(bounds);yachtCanvas.dataset.safe='true';yachtCanvas.dataset.recovery=String(recovery);
+    yachtCanvas.dataset.heading=heading.toFixed(4);yachtCanvas.dataset.clearance=pose.clearance.toFixed(2);
+    yachtCanvas.dataset.approach=JSON.stringify({target:guide.nearest?.id||'',offset:+(boatX-at(boatY).x).toFixed(2),strength:+guide.strength.toFixed(2)});
+    for(const stop of attentionStops){const focus=stop===guide.nearest?guide.strength:0;if(Math.abs(focus-(stop.focus||0))>.025){stop.element.style.setProperty('--river-focus',focus.toFixed(2));stop.focus=focus;}}
   }
-  function render(){ctx.clearRect(0,0,width,height);renderWater();drawYacht();canvas.dataset.variant='atelier';canvas.dataset.material=texture?'ready':'loading';canvas.dataset.viewport=width+'x'+height;
+  function renderWaterFrame(){ctx.clearRect(0,0,width,height);renderWater();canvas.dataset.variant='atelier';canvas.dataset.material=texture?'ready':'loading';canvas.dataset.viewport=width+'x'+height;
     if(portfolioPreview&&!previewReady&&texture&&boat.complete&&boat.naturalWidth){previewReady=true;parent.postMessage({type:'bangingo:preview-ready'},'*');}
   }
-  function tick(now){frame=0;if(dirty||now-last>40){if(moving())phase+=Math.min((now-last)/1000,.06);last=now;render();dirty=false;}if(moving())frame=requestAnimationFrame(tick);}
-  function wake(){dirty=true;if(!document.hidden&&!frame)frame=requestAnimationFrame(tick);else if(document.hidden)render();}
-  water.onload=prepareTexture;boat.onload=wake;foam.onload=wake;water.src='assets/atelier-water.webp';boat.src='assets/river-yacht.webp';foam.src='assets/atelier-wake.webp';
+  function tick(now){frame=0;const dt=Math.min((now-last)/1000||1/60,.05);last=now;if(moving())phase+=dt;
+    if(dirty||now-lastWater>40){renderWaterFrame();lastWater=now;dirty=false;}drawYacht(dt);if(moving())frame=requestAnimationFrame(tick);
+  }
+  function wake(){dirty=true;if(!document.hidden&&!frame)frame=requestAnimationFrame(tick);}
+  water.onload=prepareTexture;boat.onload=()=>{hull=navigation.hull(BOAT_LENGTH,BOAT_LENGTH*boat.naturalWidth/boat.naturalHeight);resize();};foam.onload=wake;water.src='assets/atelier-water.webp';boat.src='assets/river-yacht.webp';foam.src='assets/atelier-wake.webp';
   addEventListener('resize',resize,{passive:true});addEventListener('scroll',wake,{passive:true});new ResizeObserver(resize).observe(document.querySelector('main'));
   addEventListener('bangingo:palette',wake);document.addEventListener('visibilitychange',()=>{if(document.hidden&&frame){cancelAnimationFrame(frame);frame=0;}else wake();});
   document.fonts.ready.then(resize);resize();
