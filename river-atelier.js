@@ -7,7 +7,7 @@
   const yachtCanvas=document.createElement('canvas');
   yachtCanvas.id='yacht-canvas';yachtCanvas.setAttribute('aria-hidden','true');canvas.after(yachtCanvas);
   const yachtContext=yachtCanvas.getContext('2d',{alpha:true});
-  let width=0,height=0,dpr=1,mobile=false,route=[],mobileBanks=[],texture=null,flowLayers=[],textureScale=.65,phase=0,boatY=0,heading=0,frame=0,last=0,dirty=true;
+  let width=0,height=0,dpr=1,mobile=false,route=[],mobileBanks=[],landmarks=[],texture=null,flowLayers=[],textureScale=.65,phase=0,boatY=0,heading=0,frame=0,last=0,dirty=true;
   const portfolioPreview=window.self!==window.top&&new URLSearchParams(location.search).get('preview')==='portfolio';
   let previewPlaying=false,previewReady=false;
   const moving=()=>!document.hidden&&(!portfolioPreview||previewPlaying);
@@ -29,13 +29,46 @@
       const a=mobileBanks[i],b=mobileBanks[i+1],t=Math.max(0,Math.min(1,(y-a.y)/Math.max(1,b.y-a.y)));
       center=a.x+(b.x-a.x)*t*t*(3-2*t);
     }
-    // The entire channel stays inside the middle half of the phone screen.
-    return{x:width*(center+.009*Math.sin(y/173)+.006*Math.sin(y/337)),width:Math.min(72,width*.18)+3*Math.sin(y/249)};
+    const focus=emphasisAt(y),base=Math.max(50/width,.145+.022*Math.sin(y/187)+.012*Math.sin(y/389));
+    const breadth=base+(.25-base)*focus.weight;
+    // Wider pools move slightly away from the occupied bank, keeping text dry.
+    center=.5+(center-.5)*(1+(breadth-.14)*3);
+    return{x:width*(center+.004*Math.sin(y/173)),width:width*breadth};
+  }
+  function emphasisAt(y){
+    let total=0,center=0,breadth=0,remaining=1;
+    for(const point of landmarks){
+      const influence=Math.exp(-.5*Math.pow((y-point.y)/point.radius,2));
+      total+=influence;center+=point.center*influence;breadth+=point.breadth*influence;remaining*=1-influence;
+    }
+    return{weight:1-remaining,landmark:total?{center:center/total,breadth:breadth/total}:null};
+  }
+  function desktopAt(y){
+    const {weight,landmark}=emphasisAt(y);
+    // Long, unequal bends connect the editorial pools; no repeating-width ribbon.
+    const current=.5+.051*Math.sin(y/347+.6)+.012*Math.sin(y/719-.8);
+    const narrow=.098+.019*Math.sin(y/281+1.1)+.008*Math.sin(y/137);
+    const center=current+((landmark?.center??.5)-current)*weight;
+    const breadth=narrow+((landmark?.breadth??.1)-narrow)*weight;
+    const clearance=2*Math.min(center-.35,.65-center);
+    return{x:width*center,width:width*Math.min(breadth,clearance)};
   }
   function resize(){
-    width=document.documentElement.clientWidth;height=innerHeight;mobile=width<=680;dpr=Math.min(devicePixelRatio||1,mobile?1.5:1.35);
+    width=document.documentElement.clientWidth;height=innerHeight;mobile=matchMedia('(max-width:680px)').matches;dpr=Math.min(devicePixelRatio||1,mobile?1.5:1.35);
     canvas.width=yachtCanvas.width=Math.round(width*dpr);canvas.height=yachtCanvas.height=Math.round(height*dpr);
     ctx.setTransform(dpr,0,0,dpr,0,0);yachtContext.setTransform(dpr,0,0,dpr,0,0);
+    // Each important heading gets its own inlet, measured after translation/reflow.
+    landmarks=[
+      ['#main-title',.49,.255,215],['#packages-title',.49,.275,230],
+      ['#golden-title',.475,.23,205],['#dark-title',.525,.22,180],
+      ['#film-title',.485,.245,190],['#beyond-title',.475,.225,180],
+      ['#programme-title',.49,.26,220],['.programme-group:last-child h3',.49,.235,185],
+      ['#contact-title',.485,.265,240]
+    ].flatMap(([selector,center,breadth,radius])=>{
+      const element=document.querySelector(selector);if(!element)return[];
+      const r=element.getBoundingClientRect();
+      return r.height?[{id:element.id||selector,y:r.top+scrollY+r.height*.56,center,breadth,radius:mobile?Math.max(110,r.height*.65):Math.max(radius,r.height*.65)}]:[];
+    });
     mobileBanks=[];
     if(mobile){
       // Take the actual translated layout into account, rather than assuming fixed heights.
@@ -50,12 +83,14 @@
     }
     route=[];
     for(let y=ROUTE_START;y<document.documentElement.scrollHeight+600;y+=ROUTE_STEP){
-      const p=mobile?mobileAt(y):{x:width*(.5+.06*Math.sin(y/220+.4)+.008*Math.sin(y/650)),width:width*(.13+.008*Math.sin(y/750))};
+      const p=mobile?mobileAt(y):desktopAt(y);
       const previous=route.at(-1);
       route.push({y,x:p.x,width:p.width,distance:previous?previous.distance+Math.hypot(p.x-previous.x,ROUTE_STEP):0});
     }
-    canvas.dataset.routing='centered';
+    canvas.dataset.routing='editorial-pools';
     canvas.dataset.channelBounds=JSON.stringify({centerMin:Math.min(...route.map(p=>p.x))/width,centerMax:Math.max(...route.map(p=>p.x))/width,leftBankMin:Math.min(...route.map(p=>p.x-p.width/2))/width,rightBankMax:Math.max(...route.map(p=>p.x+p.width/2))/width});
+    canvas.dataset.channelWidths=JSON.stringify({min:Math.min(...route.map(p=>p.width)),max:Math.max(...route.map(p=>p.width))});
+    canvas.dataset.landmarks=JSON.stringify(landmarks.map(p=>({id:p.id,y:Math.round(p.y),width:Math.round(at(p.y).width)})));
     textureScale=mobile?.18:.76;wake();
   }
   function prepareTexture(){

@@ -17,6 +17,7 @@
 html[dir=rtl] [data-atelier] .offers-heading>*{direction:rtl}
 [data-atelier] .offers-heading h2{font-size:clamp(40px,4.8vw,74px)}
 [data-atelier] .trip-grid,[data-atelier] #programme-list{grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:36%;row-gap:40px;direction:ltr}
+[data-atelier] #programme-list>.programme-group{grid-column:auto;min-width:0;background:transparent}
 [data-atelier] .trip-copy,[data-atelier] .programme-group{direction:inherit}
 html[dir=rtl] [data-atelier] .trip-copy,html[dir=rtl] [data-atelier] .programme-group{direction:rtl}
 [data-atelier] .programme-heading{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:36%;direction:ltr}
