@@ -1,0 +1,47 @@
+/* Shared, accessible colour system for the two client options. */
+:root{color-scheme:light;--surface:#fffaf5;--water:#067d87;--foam:#c9eee2;--sand:#dbcbb6;--contact-red:#c12d3d}
+body{background:var(--paper);color:var(--ocean)}
+.header{background:color-mix(in srgb,var(--paper) 95%,transparent);height:96px;gap:20px;border-bottom-color:color-mix(in srgb,var(--ocean) 12%,transparent)}
+.header nav a,.header .outline,.hero-contact,.chapter-bottom a{color:var(--ocean)}
+.header .brand img{width:174px}
+.header-contact{display:flex;flex-direction:column;align-items:stretch;gap:0;border:2px solid var(--contact-red);border-radius:10px;padding:3px 12px;white-space:nowrap;flex-shrink:0;background:var(--surface);color:var(--ocean);font-size:11px;line-height:1.3}
+.header-contact a{display:flex;align-items:center;justify-content:center;min-height:27px;font-weight:600;text-underline-offset:4px}.header-contact a:hover{text-decoration:underline}.header-contact .header-phone{font-size:13px}
+.direct-contact{display:flex;flex-direction:column;border:2px solid var(--contact-red);border-radius:12px;background:var(--surface);padding:10px 20px;gap:0;margin-top:25px;max-width:100%}
+.direct-contact a{min-height:54px;display:flex;align-items:center;justify-content:space-between;gap:12px;border:0;font-size:clamp(20px,2vw,29px);color:var(--ocean);overflow-wrap:anywhere}.direct-contact a+a{border-top:1px solid color-mix(in srgb,var(--contact-red) 24%,transparent)}.direct-contact a:hover{color:var(--contact-red)}
+.intro-copy p,.intro-copy p:not(.eyebrow),.intro-copy .eyebrow,.chapter-copy p,.chapter-number,.film-heading>p,.programme-heading>p,.contact-copy>p:not(.chapter-number),.contact-copy .chapter-number,.signal-head p,.signal-selection p,.signal-note,footer p{color:var(--muted)}
+.intro h1 em,.chapter h2 em,.contact-section h2 em,.programme h2 em,.film h2 em{color:var(--clay)}
+.intro-copy .outline,.signal-card>.solid,.mobile-contact a:last-child{background:var(--clay);color:#fff;border-color:var(--clay)}
+.intro-copy .outline:hover,.signal-card>.solid:hover{background:color-mix(in srgb,var(--clay) 85%,black)}
+.header .outline:hover{background:var(--ocean);color:var(--paper)}
+.header .outline,.moods span,.guest-row,.programme-item{border-color:color-mix(in srgb,var(--ocean) 25%,transparent)}
+.programme,.film,footer{background:var(--paper)}.signal-card{background:var(--surface);border-color:color-mix(in srgb,var(--ocean) 23%,transparent)}
+.signal-orbit{background:var(--clay);color:#fff}.moods input:checked+span{background:var(--ocean);color:var(--surface);border-color:var(--ocean)}
+.guest-row select,.guest-row option{background:var(--surface);color:var(--ocean)}
+.signal-selection>span,.signal-selection .text-button{color:var(--muted)}#surprise{color:var(--clay);border-color:var(--clay)}
+.mobile-contact{background:var(--surface);color:var(--ocean)}
+.contact-section{background:linear-gradient(130deg,var(--paper),color-mix(in srgb,var(--sand) 55%,var(--paper)))}
+[data-layout=classic] .intro .stage{background:radial-gradient(ellipse at 90% 10%,color-mix(in srgb,var(--clay) 8%,transparent),transparent 65%),var(--paper)}
+[data-layout=classic] .golden .stage,[data-layout=classic] .beyond .stage{background:linear-gradient(140deg,var(--paper),var(--surface));color:var(--ocean)}
+[data-layout=classic] .dark .stage{background:radial-gradient(ellipse at 100% 70%,color-mix(in srgb,var(--clay) 45%,var(--ocean)),transparent 80%),var(--ocean);color:#fff8f0}
+[data-layout=classic] .dark .chapter-copy p,[data-layout=classic] .dark .chapter-number,[data-layout=classic] .dark .chapter-bottom>*{color:#e5eaee}
+[data-layout=classic] .dark h2 em{color:var(--sand)}
+[data-river] .film,[data-river] .programme,[data-river] .contact-section{background:transparent}
+[data-river] .contact-copy,[data-river] .programme-group{background:color-mix(in srgb,var(--paper) 96%,transparent)}
+.world-controls #motion{background:var(--surface);color:var(--ocean);border-color:color-mix(in srgb,var(--ocean) 30%,transparent)}
+.progress-line i,.toggle:after{background:var(--clay)}
+:focus-visible{outline:3px solid var(--contact-red);outline-offset:5px}
+html{scroll-padding-top:104px}
+@media(max-width:1150px){.header{gap:12px;padding-inline:3%}.header .brand img{width:145px}.header nav{gap:16px;font-size:11px}.header .night-label{display:none}.header .outline{padding:10px}.header-tools{gap:8px}}
+@media(max-width:900px){.header nav{display:none}}
+@media(max-width:680px){
+ html{scroll-padding-top:140px}.header{height:128px;display:flex;align-content:start;flex-wrap:wrap;align-items:center;padding:12px 5% 8px;gap:10px}.header .brand img{width:134px}.header-tools{margin-left:auto}.header-contact{order:3;flex:0 0 100%;display:grid;grid-template-columns:.9fr 1.25fr;align-items:center;padding:0 5px;border-radius:8px;font-size:10px;min-height:44px}.header-contact a{min-height:40px;letter-spacing:0}.header-contact .header-phone{font-size:11px}.header-contact a+a{border-inline-start:1px solid color-mix(in srgb,var(--contact-red) 25%,transparent)}
+ .direct-contact{padding:8px 14px}.direct-contact a{font-size:clamp(17px,5.3vw,27px);min-height:55px}
+ [data-river] .intro .stage,body.still[data-river] .world.intro .stage{padding-top:164px}
+ [data-layout=classic] .intro .stage{padding-top:150px!important}
+ .header .header-phone{display:flex}.header .outline{min-height:42px}.contact-section{scroll-margin-top:0}
+}
+@media(max-width:360px){.header .brand img{width:117px}.header-contact{font-size:10px}.header-contact .header-phone{font-size:10px}.header{gap:9px}}
+
+.intro,.golden,.dark,.beyond,.film,.programme,.contact-section,footer{--muted:var(--palette-muted,#4b6470)}
+.programme-group h3{color:var(--clay)}.programme-item small,.programme-note,.film-caption{color:var(--muted)}
+dialog,.close{background:var(--ocean);color:var(--surface)}

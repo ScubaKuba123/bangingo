@@ -1,0 +1,39 @@
+/* Eight independent background treatments; the selected colour palette is retained. */
+html[data-background=aurora] body{background-image:radial-gradient(ellipse at 10% 10%,#e2d5ee70,transparent 65%),radial-gradient(ellipse at 95% 85%,#cce9e080,transparent 65%),linear-gradient(120deg,#fffaf52b,transparent 60%);background-attachment:fixed}
+html[data-background=sunset] body{background-image:radial-gradient(ellipse at 95% 8%,#eec7cd70,transparent 65%),radial-gradient(ellipse at 5% 88%,#f5d2ad70,transparent 65%),linear-gradient(140deg,#fff9f040,transparent 65%);background-attachment:fixed}
+html[data-background=glow] body{background-image:radial-gradient(ellipse at 5% 12%,color-mix(in srgb,var(--sand) 46%,transparent),transparent 54%),radial-gradient(ellipse at 95% 88%,color-mix(in srgb,var(--clay) 10%,transparent),transparent 55%);background-attachment:fixed}
+html[data-background=linen] body{background-image:repeating-linear-gradient(0deg,#56452a05 0 1px,transparent 1px 4px),repeating-linear-gradient(90deg,#ffffff35 0 1px,transparent 1px 5px);background-attachment:fixed}
+html[data-background=lagoon] body{background-image:radial-gradient(ellipse at 8% 30%,color-mix(in srgb,var(--foam) 64%,transparent),transparent 65%),radial-gradient(ellipse at 90% 100%,color-mix(in srgb,var(--water) 13%,transparent),transparent 65%);background-attachment:fixed}
+html[data-background=dusk] body{background-image:radial-gradient(ellipse at 85% 10%,#4e30435c,transparent 65%),radial-gradient(ellipse at 15% 85%,#16556650,transparent 70%);background-attachment:fixed}
+html[data-background=midnight] body{background-image:radial-gradient(ellipse at 50% 30%,#17404d42,transparent 70%);background-attachment:fixed}
+html[data-tone=dark]{color-scheme:dark}
+html[data-tone=dark] .brand img{filter:invert(1) hue-rotate(180deg)}
+html[data-tone=dark] .header .brand,html[data-tone=dark] footer .brand{background:transparent}
+html[data-tone=dark] #river-canvas{filter:brightness(.81) saturate(.85)}
+html[data-tone=dark] .language select,html[data-tone=dark] .language,html[data-tone=dark] .count{color:var(--ocean);background:var(--surface);border-color:#bacbd23d}
+.intro-copy .outline,.signal-card>.solid,.mobile-contact a:last-child,.signal-orbit{color:var(--button-ink,#fff)}
+html[data-tone=dark] .intro-copy .outline:hover,html[data-tone=dark] .signal-card>.solid:hover{background:color-mix(in srgb,var(--clay) 88%,white)}
+html[data-tone=dark] .header-contact,html[data-tone=dark] .direct-contact{border-color:#f36a74}
+html[data-tone=dark] .contact-copy,html[data-tone=dark] .programme-group{background:color-mix(in srgb,var(--paper) 94%,transparent)}
+html[data-tone=dark] footer{background:var(--paper)}
+html[data-tone=dark] .chapter-bottom a,html[data-tone=dark] .hero-contact,html[data-tone=dark] .programme-item{border-color:#c3d1d433}
+html[data-tone=dark] .programme-item:hover{color:var(--clay)}
+html[data-tone=dark] .moods span{color:var(--ocean)}
+html[data-tone=dark] .moods input:checked+span{color:var(--paper)}
+html[data-tone=dark] .signal-orbit{box-shadow:0 0 0 5px #e8cfb212}
+html[data-tone=dark] dialog,html[data-tone=dark] .close{background:var(--surface);color:var(--ocean)}
+html[data-tone=dark] .detail-category,html[data-tone=dark] .detail-copy .solid,html[data-tone=dark] .collection-content .solid{color:var(--paper);background:var(--clay)}
+html[data-tone=dark] .detail-category{background:none;color:var(--clay)}
+/* Content must reflow rather than rely on clipping at narrow widths or long translations. */
+.header-tools,.intro-copy,.chapter-copy,.film-heading>* , .programme-heading>* , .contact-section>* , .signal-head>div,.programme-item>span,.selected-item>div{min-width:0}
+.chapter-copy h2,.film h2,.programme h2,.contact-section h2,.detail-copy h2,.signal-head h3,.collection-content h2{overflow-wrap:anywhere;text-wrap:balance}
+.photo .caption>span{min-width:0}.photo .caption strong,.photo .caption small{overflow-wrap:anywhere}.photo .caption svg{flex-shrink:0}
+.detail-image[src*="event-hosts"]{object-position:50% 15%}
+.programme-item small,.programme-item strong,.selected-item h3,.selected-item p,.signal-selection p{overflow-wrap:anywhere}
+.programme-group h3{overflow-wrap:anywhere;hyphens:auto;text-wrap:balance}
+@media(min-width:681px) and (max-width:1000px){#programme-list{grid-template-columns:repeat(2,minmax(0,1fr))}.programme-group:last-child{grid-column:1/-1}}
+.moods{min-width:0}.moods label{max-width:100%}.moods span{white-space:normal}.guest-row{gap:18px}.guest-row select{flex-shrink:0}
+.signal-note,.film-caption,.chapter-bottom,.contact-copy p{overflow-wrap:anywhere}
+@media(max-width:680px){.film h2{font-size:clamp(40px,12.7vw,58px)}.programme h2{font-size:clamp(40px,12.2vw,54px)}.contact-section h2{font-size:clamp(42px,12.6vw,58px)}.signal-head h3{font-size:clamp(27px,8.3vw,36px)}.photo .caption{max-width:100%}.collection-actions>*{white-space:normal}.selected-item{gap:12px}.selected-item .remove{max-width:30%;white-space:normal}}
+@media(max-width:360px){.chapter-bottom{flex-wrap:wrap}.chapter-bottom>span,.chapter-bottom a{max-width:100%}.signal-head{gap:12px}.signal-orbit{width:36px;height:36px;flex-shrink:0}.intro-copy .outline{gap:14px}}
+@media(max-width:680px){.header-contact,.header-contact .header-phone{font-size:12px}}
