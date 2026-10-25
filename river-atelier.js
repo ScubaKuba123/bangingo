@@ -23,16 +23,17 @@
     return{x:a.x+(b.x-a.x)*t,width:a.width+(b.width-a.width)*t,distance:a.distance+(b.distance-a.distance)*t};
   }
   function mobileAt(y){
-    let center=.61;
+    let center=.61,turn=0;
     if(mobileBanks.length){
       let i=0;while(i<mobileBanks.length-2&&y>mobileBanks[i+1].y)i++;
       const a=mobileBanks[i],b=mobileBanks[i+1],t=Math.max(0,Math.min(1,(y-a.y)/Math.max(1,b.y-a.y)));
       center=a.x+(b.x-a.x)*t*t*(3-2*t);
+      if(a.x!==b.x)turn=Math.pow(Math.sin(Math.PI*t),.65);
     }
-    const focus=emphasisAt(y),base=Math.max(50/width,.145+.022*Math.sin(y/187)+.012*Math.sin(y/389));
-    const breadth=base+(.25-base)*focus.weight;
+    const focus=emphasisAt(y),base=Math.max(60/width,.145+.022*Math.sin(y/187)+.012*Math.sin(y/389));
+    const poolBreadth=base+(.25-base)*focus.weight,breadth=Math.max(poolBreadth,88*turn/width);
     // Wider pools move slightly away from the occupied bank, keeping text dry.
-    center=.5+(center-.5)*(1+(breadth-.14)*3);
+    center=.5+(center-.5)*(1+(poolBreadth-.14)*3);
     const side=Math.max(-1,Math.min(1,(center-.5)/.08));
     const bend=(.012+.022*Math.sin(y/137+.4*Math.sin(y/431)))*(1-.35*focus.weight);
     return{x:width*(center+side*bend),width:width*breadth};
@@ -79,7 +80,7 @@
       const islands=[...document.querySelectorAll(selector)].map(el=>el.getBoundingClientRect()).filter(r=>r.width&&r.height).sort((a,b)=>a.top-b.top);
       for(const r of islands){
         const x=(r.left+r.right)/2<width/2?.61:.39;
-        mobileBanks.push({y:r.top+scrollY-35,x},{y:r.bottom+scrollY+35,x});
+        mobileBanks.push({y:r.top+scrollY-15,x},{y:r.bottom+scrollY+15,x});
       }
       mobileBanks.sort((a,b)=>a.y-b.y);
       if(mobileBanks.length){mobileBanks.unshift({y:ROUTE_START-500,x:mobileBanks[0].x});mobileBanks.push({y:document.documentElement.scrollHeight+1000,x:mobileBanks.at(-1).x});}
