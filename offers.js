@@ -12,6 +12,7 @@
     return `<img src="assets/${p.image}-md.webp" srcset="${asset.variants.map(v=>'assets/'+v.file+' '+v.width+'w').join(', ')}" sizes="${active?'(max-width:760px) 100vw, 50vw':'(max-width:680px) 75vw, (max-width:1000px) 40vw, 27vw'}" width="${asset.dimensions[0]}" height="${asset.dimensions[1]}" loading="${eager?'eager':'lazy'}" decoding="async" alt="" style="object-position:${asset.position||'50% 50%'}">`;
   }
   const mount=$('#enquiry');
+  let enquiryDialog;
   if(mount){
     mount.innerHTML=`<form class="enquiry-form"><h3 data-offer="formTitle"></h3><label class="form-wide"><span data-offer="package"></span><select name="package"></select></label><label class="form-wide"><span data-offer="email"></span><input name="email" type="email" autocomplete="email" dir="ltr" maxlength="254" required></label><label><span data-offer="date"></span><input name="date" type="date" required></label><label><span data-offer="guests"></span><input name="guests" type="number" min="1" max="999" inputmode="numeric" value="2" required></label><label class="form-wide"><span data-offer="city"></span><input name="city" autocomplete="address-level2" maxlength="100" required></label><label class="form-wide"><span data-offer="description"></span><textarea name="description" rows="4" maxlength="1500" required></textarea></label><button class="solid form-wide" type="submit" data-offer="prepare"></button><p class="enquiry-note form-wide" data-offer="privacy"></p><div class="draft-result form-wide" hidden><p role="status" data-offer="ready"></p><pre class="draft-preview"></pre><div class="draft-actions"><a class="solid draft-email" data-offer="emailAction"></a></div></div></form>`;
     const now=new Date();
@@ -19,6 +20,23 @@
     mount.querySelector('[name=date]').min=min;
     mount.querySelector('form').addEventListener('submit',event=>{event.preventDefault();draft();mount.querySelector('.draft-result').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth',block:'center'});});
     mount.querySelector('form').addEventListener('input',()=>{mount.querySelector('.draft-result').hidden=true;});
+    if(document.body.hasAttribute('data-atelier')){
+      const tools=mount.parentElement,home=tools.parentElement,phone=matchMedia('(max-width:680px)');
+      const button=document.createElement('button');button.type='button';button.className='solid mobile-enquiry-open';button.dataset.offer='plan';
+      button.setAttribute('aria-haspopup','dialog');button.setAttribute('aria-controls','mobile-enquiry');
+      home.querySelector('.contact-copy').append(button);
+      enquiryDialog=document.createElement('dialog');enquiryDialog.id='mobile-enquiry';
+      mount.querySelector('h3').id='mobile-enquiry-title';enquiryDialog.setAttribute('aria-labelledby','mobile-enquiry-title');
+      const close=document.createElement('button');close.type='button';close.className='close';close.dataset.label='close';
+      close.innerHTML='<svg aria-hidden="true"><use href="#close"/></svg>';enquiryDialog.append(close);document.body.append(enquiryDialog);
+      let previousOverflow='';
+      button.addEventListener('click',()=>{previousOverflow=document.body.style.overflow;enquiryDialog.append(tools);enquiryDialog.showModal();document.body.style.overflow='hidden';$('#sunset-film')?.pause();close.focus();});
+      close.addEventListener('click',()=>enquiryDialog.close());
+      enquiryDialog.addEventListener('close',()=>{home.append(tools);document.body.style.overflow=previousOverflow;if(phone.matches)button.focus({preventScroll:true});});
+      $('#collection')?.addEventListener('close',()=>{if(enquiryDialog.open)document.body.style.overflow='hidden';});
+      $('#collection-contact')?.addEventListener('click',()=>{if(enquiryDialog.open)enquiryDialog.close();});
+      phone.addEventListener('change',()=>{if(!phone.matches&&enquiryDialog.open)enquiryDialog.close();});
+    }
   }
   function draft(){
     const data=new FormData(mount.querySelector('form'));
@@ -31,6 +49,7 @@
   function render(){
     document.documentElement.lang=locale;
     document.documentElement.dir=locale==='ar'?'rtl':'ltr';
+    enquiryDialog?.querySelector('.close').setAttribute('aria-label',window.BANGINGO_LOCALES[locale].close);
     const grid=$('#packages-list');
     if(grid)grid.innerHTML=catalogue.packages.map((p,i)=>{const c=copy(p.id);return `<a class="trip-card" href="packages/${p.id}.html"><div class="trip-image">${photo(p)}<span class="trip-index">0${i+1}</span></div><div class="trip-copy"><h3>${escape(c.title)}</h3><p>${escape(c.tagline)}</p><span class="trip-link">${ui('read')} <b aria-hidden="true">↗</b></span></div></a>`;}).join('');
     if(active){

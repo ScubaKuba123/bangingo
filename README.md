@@ -20,7 +20,7 @@
 - A five-field enquiry plus package selection. It builds an email draft for the visitor to send, and never claims that an enquiry was sent automatically. Form details are not saved in localStorage or submitted to the locale endpoint.
 - Fifteen activity ideas and a personal selection that prepares an email message. Contact is exclusively through contact@bangingo.com; no telephone number or WhatsApp action is shown.
 - Eight independent backgrounds and eight colour palettes in Bonsai Color Choice Kit.
-- Local responsive images, subject-aware crops, self-hosted fonts and an optional yacht film. Organic photo outlines follow the river; on phones, photos alternate banks and the river crosses the clear spaces between them.
+- Local responsive images, subject-aware crops, self-hosted fonts and an optional yacht film. The river follows a continuous central channel, with organic photos and content on both banks. On phones the route adapts to the translated content; the enquiry form opens in a full-width dialog so its fields remain comfortable to use.
 
 ## Run locally
 

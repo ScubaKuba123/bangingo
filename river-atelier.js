@@ -7,7 +7,7 @@
   const yachtCanvas=document.createElement('canvas');
   yachtCanvas.id='yacht-canvas';yachtCanvas.setAttribute('aria-hidden','true');canvas.after(yachtCanvas);
   const yachtContext=yachtCanvas.getContext('2d',{alpha:true});
-  let width=0,height=0,dpr=1,mobile=false,anchors=[],route=[],mobileScenes=[],texture=null,flowLayers=[],textureScale=.65,phase=0,boatY=0,heading=0,frame=0,last=0,dirty=true;
+  let width=0,height=0,dpr=1,mobile=false,route=[],mobileBanks=[],texture=null,flowLayers=[],textureScale=.65,phase=0,boatY=0,heading=0,frame=0,last=0,dirty=true;
   const portfolioPreview=window.self!==window.top&&new URLSearchParams(location.search).get('preview')==='portfolio';
   let previewPlaying=false,previewReady=false;
   const moving=()=>!document.hidden&&(!portfolioPreview||previewPlaying);
@@ -17,53 +17,45 @@
     parent.postMessage({type:'bangingo:preview-state',playing:previewPlaying,phase},event.origin);
   });
   const grain=i=>{const v=Math.sin(i*127.1+311.7)*43758.5453;return v-Math.floor(v);};
-  function rawAt(y){let i=0;while(i<anchors.length-2&&y>anchors[i+1].y)i++;const a=anchors[i],b=anchors[i+1];if(!a||!b)return{x:width*.6,width:width*.3};const prev=anchors[Math.max(0,i-1)],next=anchors[Math.min(anchors.length-1,i+2)],span=Math.max(1,b.y-a.y),t=Math.min(1,Math.max(0,(y-a.y)/span)),m0=(b.x-prev.x)/Math.max(1,b.y-prev.y),m1=(next.x-a.x)/Math.max(1,next.y-a.y);return{x:(2*t*t*t-3*t*t+1)*a.x+(t*t*t-2*t*t+t)*span*m0+(-2*t*t*t+3*t*t)*b.x+(t*t*t-t*t)*span*m1,width:a.width+(b.width-a.width)*t*t*(3-2*t)};}
-  function at(y){const index=Math.max(0,Math.min(route.length-2,(y-ROUTE_START)/ROUTE_STEP)),i=Math.floor(index),t=index-i,a=route[i],b=route[i+1];if(!a||!b)return{...rawAt(y),distance:y};return{x:a.x+(b.x-a.x)*t,width:a.width+(b.width-a.width)*t,distance:a.distance+(b.distance-a.distance)*t};}
-  function add(y,x,w){anchors.push({y,x:x*width,width:w*width});}
+  function at(y){
+    const index=Math.max(0,Math.min(route.length-2,(y-ROUTE_START)/ROUTE_STEP)),i=Math.floor(index),t=index-i,a=route[i],b=route[i+1];
+    if(!a||!b)return{x:width*.5,width:width*.16,distance:y};
+    return{x:a.x+(b.x-a.x)*t,width:a.width+(b.width-a.width)*t,distance:a.distance+(b.distance-a.distance)*t};
+  }
   function mobileAt(y){
-    const right=width-53,scene=mobileScenes.find(points=>y>=points[0].y&&y<=points.at(-1).y);
-    let x=right;
-    if(scene){
-      let i=0;while(i<scene.length-2&&y>scene[i+1].y)i++;
-      const a=scene[i],b=scene[i+1],t=Math.max(0,Math.min(1,(y-a.y)/(b.y-a.y)));
-      // Flat tangents at the banks; each crossing happens in the gap between photos.
-      x=a.x+(b.x-a.x)*t*t*(3-2*t);
+    let center=.61;
+    if(mobileBanks.length){
+      let i=0;while(i<mobileBanks.length-2&&y>mobileBanks[i+1].y)i++;
+      const a=mobileBanks[i],b=mobileBanks[i+1],t=Math.max(0,Math.min(1,(y-a.y)/Math.max(1,b.y-a.y)));
+      center=a.x+(b.x-a.x)*t*t*(3-2*t);
     }
-    return{x:x+7*Math.sin(y/151+.6)+5*Math.sin(y/277),width:78+4*Math.sin(y/217+.8)};
+    // The entire channel stays inside the middle half of the phone screen.
+    return{x:width*(center+.009*Math.sin(y/173)+.006*Math.sin(y/337)),width:Math.min(72,width*.18)+3*Math.sin(y/249)};
   }
   function resize(){
-    width=document.documentElement.clientWidth;height=innerHeight;mobile=width<=680;dpr=Math.min(devicePixelRatio||1,mobile?1.5:1.35);canvas.width=yachtCanvas.width=Math.round(width*dpr);canvas.height=yachtCanvas.height=Math.round(height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);yachtContext.setTransform(dpr,0,0,dpr,0,0);anchors=[];
-    mobileScenes=[];
-    if(mobile)for(const world of document.querySelectorAll('.world')){
-      const photos=[...world.querySelectorAll('.photo')];if(!photos.length)continue;
-      const points=[];
-      photos.forEach((photo,i)=>{
-        const r=photo.getBoundingClientRect(),top=r.top+scrollY,bottom=r.bottom+scrollY,x=i%2?53:width-53;
-        if(!i)points.push({y:top-120,x});
-        points.push({y:top+30,x},{y:bottom-30,x});
-        if(i===photos.length-1)points.push({y:bottom+120,x:width-53});
-      });
-      mobileScenes.push(points);
+    width=document.documentElement.clientWidth;height=innerHeight;mobile=width<=680;dpr=Math.min(devicePixelRatio||1,mobile?1.5:1.35);
+    canvas.width=yachtCanvas.width=Math.round(width*dpr);canvas.height=yachtCanvas.height=Math.round(height*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);yachtContext.setTransform(dpr,0,0,dpr,0,0);
+    mobileBanks=[];
+    if(mobile){
+      // Take the actual translated layout into account, rather than assuming fixed heights.
+      const selector='.intro-copy,.chapter-copy,.world .photo,.scroll-cue,.chapter-bottom,.offers-heading,.trip-card,.programme-note,.film-heading,.film-frame,.film-caption,.programme-heading,.programme-group,.contact-copy,footer';
+      const islands=[...document.querySelectorAll(selector)].map(el=>el.getBoundingClientRect()).filter(r=>r.width&&r.height).sort((a,b)=>a.top-b.top);
+      for(const r of islands){
+        const x=(r.left+r.right)/2<width/2?.61:.39;
+        mobileBanks.push({y:r.top+scrollY-35,x},{y:r.bottom+scrollY+35,x});
+      }
+      mobileBanks.sort((a,b)=>a.y-b.y);
+      if(mobileBanks.length){mobileBanks.unshift({y:ROUTE_START-500,x:mobileBanks[0].x});mobileBanks.push({y:document.documentElement.scrollHeight+1000,x:mobileBanks.at(-1).x});}
     }
-    for(const section of document.querySelectorAll('main>section')){const y=section.offsetTop,h=section.offsetHeight;
-      if(section.id==='home'){
-        if(mobile){const start=section.querySelector('.photo-world').getBoundingClientRect().top+scrollY;add(-100,1.25,.34);add(start-140,1.08,.34);add(start+130,.84,.40);add(start+440,.22,.40);add(start+740,.83,.42);add(y+h,.72,.33);}
-        else{add(-350,.91,.22);add(60,.84,.22);add(270,.65,.23);add(450,.56,.23);add(660,.63,.22);add(890,.47,.25);add(y+h,.38,.24);}
-      }else if(section.classList.contains('chapter')){
-        if(mobile){const start=section.querySelector('.photo-world').getBoundingClientRect().top+scrollY;add(y+80,1.13,.26);add(start,.89,.38);add(start+270,.15,.38);add(start+540,.54,.40);add(y+h,.87,.29);}
-        else if(section.id==='after-dark'){add(y+100,.46,.20);add(y+360,.49,.21);add(y+610,.44,.22);add(y+850,.52,.23);add(y+h,.68,.21);}
-        else{add(y+100,.63,.22);add(y+330,.55,.22);add(y+560,.48,.22);add(y+800,.52,.23);add(y+h,.69,.21);}
-      }else{const x=(width-34)/width;add(y+130,x,.13);add(y+h*.7,x,.13);add(y+h,x,.13);}
+    route=[];
+    for(let y=ROUTE_START;y<document.documentElement.scrollHeight+600;y+=ROUTE_STEP){
+      const p=mobile?mobileAt(y):{x:width*(.5+.06*Math.sin(y/220+.4)+.008*Math.sin(y/650)),width:width*(.13+.008*Math.sin(y/750))};
+      const previous=route.at(-1);
+      route.push({y,x:p.x,width:p.width,distance:previous?previous.distance+Math.hypot(p.x-previous.x,ROUTE_STEP):0});
     }
-    anchors.sort((a,b)=>a.y-b.y);add(document.documentElement.scrollHeight+500,(width-34)/width,.13);route=[];
-    // Smooth the centreline over a physical distance, including section joins.
-    // Arc length keeps the current's speed consistent through curves.
-    const sigma=mobile?60:75;
-    for(let y=ROUTE_START;y<document.documentElement.scrollHeight+600;y+=ROUTE_STEP){let x=0,w=0,total=0;for(let k=-6;k<=6;k++){const weight=Math.exp(-.5*(k/2)**2),p=rawAt(y+k*sigma/2);x+=p.x*weight;w+=p.width*weight;total+=weight;}x/=total;w/=total;
-      // Mobile photography alternates banks. Text sections retain a clear side channel.
-      if(mobile){const p=mobileAt(y);x=p.x;w=p.width;}
-      x=Math.max(34,Math.min(width-26,x));
-      const prev=route.at(-1);route.push({y,x,width:w,distance:prev?prev.distance+Math.hypot(x-prev.x,ROUTE_STEP):0});}
+    canvas.dataset.routing='centered';
+    canvas.dataset.channelBounds=JSON.stringify({centerMin:Math.min(...route.map(p=>p.x))/width,centerMax:Math.max(...route.map(p=>p.x))/width,leftBankMin:Math.min(...route.map(p=>p.x-p.width/2))/width,rightBankMax:Math.max(...route.map(p=>p.x+p.width/2))/width});
     textureScale=mobile?.18:.76;wake();
   }
   function prepareTexture(){
