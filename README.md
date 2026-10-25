@@ -4,7 +4,7 @@
 
 [Open the final website](https://bangingo-client-choice.vercel.app/) · [Earlier design choices](https://bangingo-client-choice.vercel.app/choose.html) · [Bonsai Color Choice Kit](https://bangingo-client-choice.vercel.app/color-kit.html) · [BonsAI portfolio](https://itbonsai.pl/realizacje#bangingo)
 
-![Bangingo Pearl Aurora — actual website capture](docs/pearl-aurora.png)
+![Bangingo Pearl Aurora — actual website capture](docs/pearl-aurora.jpg)
 
 ## Selected edition
 
