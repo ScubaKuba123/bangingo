@@ -33,7 +33,9 @@
     const breadth=base+(.25-base)*focus.weight;
     // Wider pools move slightly away from the occupied bank, keeping text dry.
     center=.5+(center-.5)*(1+(breadth-.14)*3);
-    return{x:width*(center+.004*Math.sin(y/173)),width:width*breadth};
+    const side=Math.max(-1,Math.min(1,(center-.5)/.08));
+    const bend=(.012+.022*Math.sin(y/137+.4*Math.sin(y/431)))*(1-.35*focus.weight);
+    return{x:width*(center+side*bend),width:width*breadth};
   }
   function emphasisAt(y){
     let total=0,center=0,breadth=0,remaining=1;
@@ -45,13 +47,14 @@
   }
   function desktopAt(y){
     const {weight,landmark}=emphasisAt(y);
-    // Long, unequal bends connect the editorial pools; no repeating-width ribbon.
-    const current=.5+.051*Math.sin(y/347+.6)+.012*Math.sin(y/719-.8);
+    // Meanders continue through the pools, with unequal spacing and gentler outer banks.
+    const meander=Math.sin(y/171+.52*Math.sin(y/607)+.6);
     const narrow=.098+.019*Math.sin(y/281+1.1)+.008*Math.sin(y/137);
-    const center=current+((landmark?.center??.5)-current)*weight;
     const breadth=narrow+((landmark?.breadth??.1)-narrow)*weight;
-    const clearance=2*Math.min(center-.35,.65-center);
-    return{x:width*center,width:width*Math.min(breadth,clearance)};
+    const excursion=(.076-.024*weight)*meander+.009*Math.sin(y/383-.8)+((landmark?.center??.5)-.5)*weight*.45;
+    const room=.155-breadth/2;
+    const center=.5+room*Math.tanh(excursion/room);
+    return{x:width*center,width:width*breadth};
   }
   function resize(){
     width=document.documentElement.clientWidth;height=innerHeight;mobile=matchMedia('(max-width:680px)').matches;dpr=Math.min(devicePixelRatio||1,mobile?1.5:1.35);
