@@ -1,0 +1,129 @@
+/* An isolated, full-water study. Nothing here is loaded by the River edition. */
+:root{color-scheme:dark;--paper:#092d38;--ocean:#fff7e9;--clay:#efbf82;--cream:#fff7e9;--gold:#efbf82;--muted:#d2e0df;--surface:#faf4e9;--ink:#072c36}
+html{scroll-padding-top:110px}
+body.water-world{background:#073b43 url('assets/water-world-surface.webp') center/800px;color:var(--cream)}
+#water-surface,#water-objects,.water-shade{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+#water-surface{z-index:0}#water-objects{z-index:1}.water-shade{z-index:1;background:linear-gradient(90deg,#001c2c29,transparent 70%)}
+.water-world main,.water-world footer{z-index:2}.water-world main{overflow:clip}
+.water-world .header{background:#062a348c;backdrop-filter:blur(20px);border-bottom:1px solid #f9eddb24;height:94px;padding-inline:4.5%;gap:22px}
+.water-world .brand{background:#fff9ef;border:1px solid #fff4df88;border-radius:7px;padding:10px 13px;box-shadow:0 4px 18px #001e2920}
+.water-world .brand img{filter:none;width:175px;height:auto}
+.water-world .header nav a,.water-world .header-contact,.water-world .header .outline{color:var(--cream)}
+.water-world .header-contact{border:1px solid #fff2dc60;border-radius:30px;padding:12px 16px;font-size:11px}
+.water-world .language select,.water-world .header .outline{background:#082c3350;color:var(--cream);border:1px solid #fff2dc40}
+.water-world .language select{min-height:46px}.water-world select option{background:#0b3540;color:#fff7e9}
+.water-world .header .count{background:#fff3db1f;color:var(--cream)}
+.water-world .world,.water-world .world.intro,.water-world.still .world{height:980px;color:var(--cream);--gold:#efbf82;--muted:#d2e0df}
+.water-world .world.intro{height:max(820px,100svh);max-height:1100px}
+.water-world .world .stage,.water-world.still .world .stage{position:relative;height:100%;padding:0;background:transparent;overflow:visible}
+.water-world .intro-copy{top:19%;left:4.5%;width:43%;transform:none;text-align:left;pointer-events:auto}
+.water-world .intro h1{font:500 clamp(80px,9.3vw,150px)/.84 Cormorant,Georgia,serif;letter-spacing:-.055em;margin:0 0 36px;text-shadow:0 5px 32px #001d2760}
+.water-world .intro h1 em{color:#edc184;font-weight:400}
+.water-world .intro-copy p:not(.eyebrow){font:400 17px/1.8 Manrope,Arial,sans-serif;max-width:350px;margin:0 0 27px;color:#edf2e9;text-shadow:0 2px 16px #00252b}
+.water-world .intro-copy .outline{background:#07323c83;color:#fff5e5;border:1px solid #fbe6be9c;border-radius:8px;font:500 13px/1.5 Manrope,Arial,sans-serif;padding:17px 24px;gap:35px}
+.water-world .intro-copy .outline:hover{background:#efd3a2;color:#082c35}
+.water-world .hero-contact{color:#edf2e9;font-size:11px;margin-left:23px}
+.water-world .photo{border:1px solid #fff1dfb0;border-radius:38% 18% 30% 15% / 35% 21% 32% 20%;box-shadow:0 20px 45px #00192170;overflow:hidden;transform:translate3d(var(--tx,0px),var(--ty,0px),0);background:#08333e}
+.water-world .photo::after{border:none}.water-world .photo img{filter:none!important}
+.water-world .intro .photo:nth-child(1){left:auto;right:5%;top:15%;width:36%;height:40%;border-radius:41% 23% 35% 13% / 47% 36% 25% 18%}
+.water-world .intro .photo:nth-child(2){left:auto;right:4.2%;top:57%;width:23.5%;height:31%;border-radius:44% 14% 21% 28% / 30% 17% 22% 20%}
+.water-world .intro .photo:nth-child(3){left:auto;right:30%;top:58%;width:23%;height:30%;border-radius:22% 36% 18% 30% / 25% 30% 19% 34%}
+.water-world .intro .photo .caption{opacity:1;padding:65px 24px 26px;background:linear-gradient(transparent,#032831d9)}
+.water-world .intro .photo .caption strong{font-size:27px}.water-world .intro .photo .caption small{font-size:8px}
+.water-world .intro .photo .caption svg{display:none}
+.water-world .scroll-cue{left:4.5%;bottom:42px;transform:none;align-items:flex-start;margin:0;max-width:40%;color:#f4ecdf;white-space:normal}
+.water-world .scroll-cue>span{font-size:9px;letter-spacing:.1em;line-height:1.8}.water-world .scroll-cue b{background:#fff1dc55}
+.water-world .chapter-copy,.water-world .beyond .chapter-copy{top:120px;left:6%;width:39%;background:transparent}
+.water-world .chapter h2,.water-world .beyond h2{font:500 clamp(65px,7.2vw,108px)/.98 Cormorant,Georgia,serif;letter-spacing:-.04em;text-shadow:0 5px 30px #001c2d77}
+.water-world .chapter-number{color:#f5d3a1;line-height:1.8}
+.water-world .chapter-copy p{color:#e1e9e5;font-size:14px;text-shadow:0 2px 12px #001d29;max-width:360px}
+.water-world .chapter .photo:nth-child(1){left:auto;right:6%;top:115px;width:36%;height:420px}
+.water-world .chapter .photo:nth-child(2){left:8%;top:560px;width:30%;height:295px}
+.water-world .chapter .photo:nth-child(3){right:9%;top:610px;width:32%;height:270px}
+.water-world .dark .chapter-copy{left:56%;width:38%}.water-world .dark .photo:nth-child(1){left:6%;right:auto}
+.water-world .photo .caption{padding:55px 12% 30px;background:linear-gradient(transparent,#031c2deb);color:#fff7eb}
+.water-world .chapter-bottom{left:6%;right:6%;bottom:24px;border-top:1px solid #fff3df40;padding-top:18px;color:#f4e9d7}
+.water-world .chapter-bottom>span{color:#d5ded7}.water-world .chapter-bottom a{color:#f2d1a1;border-color:#f4e5c342}
+.water-world .offers-section,.water-world .programme,.water-world .film,.water-world .contact-section{padding:100px 6%;background:transparent;border-top:1px solid #eaf4ef22;color:var(--cream)}
+.water-world .offers-heading,.water-world .programme-heading{display:flex;flex-wrap:wrap;align-items:end;gap:20px 8%;max-width:none;margin-bottom:45px;background:transparent}
+.water-world .offers-heading>.chapter-number{width:100%;margin:0}.water-world .offers-heading h2{flex:1 1 45%;margin:0;font-size:clamp(55px,6.4vw,98px);line-height:1}
+.water-world .offers-heading>p:last-child{flex:1 1 38%;color:#e1e9e5;font-size:13px;max-width:440px}
+.water-world .offers-heading h2 em,.water-world .chapter h2 em{color:#edc184}
+.water-world main h2 em{color:#edc184}
+.water-world .trip-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:25px}
+.water-world .trip-card{position:relative;border:1px solid #faf1dd7a;border-radius:10px;background:#04212dc2;color:#fff7e9;box-shadow:0 14px 30px #001a2940;min-height:340px}
+.water-world .trip-image{aspect-ratio:1.16}.water-world .trip-index{background:#fff4deeb;color:#133c45;width:30px;height:30px}
+.water-world .trip-copy{position:absolute;inset:auto 0 0;padding:65px 24px 24px;background:linear-gradient(transparent,#041c2bec 48%);min-height:175px}
+.water-world .trip-copy h3{font-size:clamp(28px,2.7vw,42px);line-height:1.05}.water-world .trip-copy p{color:#e1e7e1;font-size:11px;margin:10px 0 15px}
+.water-world .trip-link{font-size:10px;color:#f3d3a5}.water-world .trip-card:last-child{grid-column:auto}
+.water-world .trip-card:nth-child(4){grid-column:span 2}.water-world .trip-card:nth-child(4) .trip-image{aspect-ratio:2.2}
+.water-world .programme-note{color:#d6e1dc;font-size:11px;background:transparent;max-width:720px;margin:25px 0 0}
+.water-world .film-heading{display:flex;justify-content:space-between;gap:30px;margin-bottom:45px;background:transparent}
+.water-world .film h2,.water-world .programme h2,.water-world .contact-section h2{font:500 clamp(55px,6.4vw,100px)/1 Cormorant,Georgia,serif;letter-spacing:-.04em;margin:0}
+.water-world .film-heading>p,.water-world .programme-heading>p{color:#e5e7df;background:transparent;max-width:290px;font-size:14px}
+.water-world .film-frame{aspect-ratio:16/8.6;border:1px solid #fff0d080;border-radius:10px;box-shadow:0 25px 70px #0418266b}
+.water-world .film-caption{background:transparent;color:#ede6db;font-size:11px}
+.water-world .programme-group{background:#052c3bac;backdrop-filter:blur(12px);border:1px solid #f6edda38;border-radius:10px;padding:28px 24px}
+.water-world #programme-list{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.water-world .programme-group h3{color:#f0c996;font-size:31px}.water-world .programme-item{color:#fff7e9;border-color:#e6e8dc38;min-height:96px}
+.water-world .programme-item strong{font-size:13px}.water-world .programme-item small{color:#cddedc;font-size:22px}
+.water-world .contact-section{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9%;align-items:start}
+.water-world .contact-copy{background:transparent;padding-top:20px}.water-world .contact-copy>p:not(.chapter-number){color:#e4e9df}
+.water-world .contact-copy h2{margin-bottom:30px}.water-world .direct-contact a{font:500 clamp(20px,2.5vw,38px)/1.4 Cormorant,Georgia,serif;border-color:#ffedc57a;margin-top:15px}
+.water-world .contact-tools{--ocean:#173c44;--muted:#50666b;--clay:#a94c3e;--paper:#f8f1e6;color:#f8f0e3}
+.water-world .enquiry-form,.water-world .signal-card{background:#faf3e9f5;color:#173c44;box-shadow:0 22px 60px #02192455;border-radius:10px}
+.water-world .enquiry-form select option{color:#173c44;background:#faf3e9}.water-world .enquiry-form h3{font-size:37px}
+.water-world .enquiry-form .solid{background:#173c44;color:#fff4e3}.water-world .signal-card .solid{color:#fff;background:#173c44}.water-world .signal-card .text-button{color:#173c44}
+.water-world .contact-tools summary{border-color:#f6e7ca66}.water-world .contact-cities{font-size:10px!important}
+.water-world footer{background:#03283263;padding:45px 6% 110px;border-color:#f6e9d034;color:#f1e8da}.water-world footer p{color:#d8e6df}
+.water-world dialog{--ocean:#fff4df;--muted:#cbdcdb;--clay:#edc184;--surface:#092b37;background:#092b37;color:#fff4df;border-radius:12px}
+.water-world dialog .close{background:#082a38;color:#fff6df;border-color:#fff2d566}.water-world dialog .detail-category,.water-world dialog .detail-description,.water-world dialog .detail-availability,.water-world dialog .detail-inclusions,.water-world dialog .local-note,.water-world dialog .collection-intro{color:#d6e3df}
+.water-world dialog .solid{background:#edc184;color:#082b33}.water-world dialog .outline{border-color:#edc184;color:#edc184}.water-world .photo .added{background:#faf1de;color:#123c44}
+.water-world .water-studio{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:11px;padding:7px 12px;border:1px solid #e9eddf44;border-radius:30px;background:#062b37d9;backdrop-filter:blur(16px);z-index:19;box-shadow:0 5px 30px #00172240;color:#fff3df;direction:ltr}
+.water-studio button,.river-return{min-height:34px;font-size:11px;white-space:nowrap}.river-return{display:flex;align-items:center;padding-inline:4px}.water-studio button[data-water-mode=auto]{padding-inline:6px}.water-studio button[aria-pressed=true]{box-shadow:0 0 0 2px #f6d9ab}.water-studio button[data-water-mode=auto][aria-pressed=true]{box-shadow:none;color:#efc389;text-decoration:underline;text-underline-offset:5px}
+.water-studio .swatch{width:26px;height:26px;min-height:26px;border:2px solid #dce9de6b;border-radius:50%}.swatch.lagoon{background:linear-gradient(145deg,#5ccfc6,#0b4a56)}.swatch.sunset{background:linear-gradient(145deg,#e4ba8d,#74547b)}.swatch.midnight{background:linear-gradient(145deg,#7887ba,#112648)}.studio-line{height:21px;border-left:1px solid #fff3d433}
+.water-world .mobile-contact{display:none}.water-world .toast{background:#f8efdc;color:#173c44;bottom:85px}
+@media(min-width:1650px){.water-world .intro-copy{top:23%}.water-world .intro h1{font-size:165px}.water-world .intro .photo:nth-child(1){top:17%}}
+@media(max-width:1100px){.water-world .header nav{display:none}.water-world .intro h1{font-size:10vw}.water-world .intro-copy{top:22%}.water-world .intro-copy p:not(.eyebrow){font-size:14px;max-width:290px}.water-world .hero-contact{display:block;margin:15px 0}.water-world .trip-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.water-world .trip-card:nth-child(4){grid-column:auto}.water-world .trip-card:nth-child(4) .trip-image{aspect-ratio:1.16}.water-world #programme-list{grid-template-columns:1fr 1fr}.water-world .programme-group:last-child{grid-column:1/-1}.water-world .contact-section{gap:6%}.water-world .enquiry-form{padding:25px 20px}.water-world .chapter h2{font-size:8vw}}
+@media(max-width:680px){
+ html{scroll-padding-top:115px}.water-world .header{height:104px;padding:12px 5%;align-items:flex-start;gap:10px;flex-wrap:wrap;background:#07313bc9}.water-world .header .brand img{width:138px;margin-top:8px}.water-world .header-tools{margin-left:auto;gap:8px}.water-world .header-contact{order:3;width:100%;display:flex;border:0;border-top:1px solid #f9eddb30;border-radius:0;padding:8px 0 0;align-items:center;font-size:11px}.water-world .header .outline{min-height:40px}.water-world .language select{min-height:40px}
+ .water-world .world,.water-world .world.intro,.water-world.still .world{height:auto;max-height:none}
+ .water-world .world .stage,.water-world.still .world .stage{height:auto;padding:70px 5% 35px;display:flex;flex-direction:column}
+ .water-world .intro .stage,.water-world.still .intro .stage{padding:155px 0 45px}
+ .water-world .intro-copy{position:relative;inset:auto;width:100%;padding:0 7%;transform:none;order:-1;text-align:left}
+ .water-world .intro h1{font-size:clamp(72px,21vw,126px);line-height:.85;margin-bottom:28px;letter-spacing:-.05em}
+ .water-world .intro-copy p:not(.eyebrow){font-size:13px;max-width:270px;line-height:1.9;margin:0 0 22px}
+ .water-world .intro-copy .outline{padding:15px 19px;gap:20px;font-size:12px}.water-world .hero-contact{display:inline-flex;margin-left:14px;font-size:10px}
+ .water-world .intro .photo-world{height:555px;margin-top:130px;position:relative;width:100%;display:block}
+ .water-world .intro .photo:nth-child(1){left:auto;right:5%;top:0;width:77%;height:270px}
+ .water-world .intro .photo:nth-child(2){left:auto;right:3%;top:295px;width:44%;height:225px}
+ .water-world .intro .photo:nth-child(3){left:4%;right:auto;top:280px;width:47%;height:210px}
+ .water-world .intro .photo .caption{display:block;padding:55px 17px 24px}.water-world .intro .photo .caption strong{font-size:24px}.water-world .intro .photo .caption small{font-size:7px}
+ .water-world .scroll-cue{position:relative;inset:auto;margin:15px 7% 0;max-width:86%;align-items:start;gap:12px}
+ .water-world .chapter-copy,.water-world .dark .chapter-copy,.water-world .beyond .chapter-copy{position:relative;inset:auto;width:100%;padding:0 3% 40px;background:transparent}
+ .water-world .chapter h2,.water-world .beyond h2{font-size:clamp(58px,15vw,82px);line-height:1.03}.water-world .chapter-copy p{font-size:13px;max-width:300px}
+ .water-world .chapter-number{font-size:9px;margin-bottom:20px}.water-world .chapter .photo-world{position:relative;inset:auto;display:grid;grid-template-columns:1fr 1fr;gap:20px;width:100%}
+ .water-world .chapter .photo:nth-child(n){position:relative;inset:auto;width:100%;height:260px;transform:none;margin:0;grid-column:auto}
+ .water-world .chapter .photo:nth-child(1){grid-column:1/-1;width:86%;height:350px;justify-self:end;margin-bottom:40px}.water-world .dark .photo:nth-child(1){justify-self:start}
+ .water-world .chapter .photo:nth-child(2){margin-top:25px}.water-world .chapter .photo:nth-child(3){height:280px}
+ .water-world .chapter .photo .caption{padding:50px 15px 24px}.water-world .chapter .photo .caption strong{font-size:24px}.water-world .photo .caption svg{display:none}
+ .water-world .chapter-bottom{position:relative;inset:auto;margin-top:40px;gap:20px;max-width:100%}.water-world .chapter-bottom>span{font-size:7px;max-width:45%}.water-world .chapter-bottom a{font-size:10px;max-width:48%}
+ .water-world .offers-section,.water-world .programme,.water-world .film,.water-world .contact-section{padding:70px 6%;width:100%;margin:0}
+ .water-world .offers-heading,.water-world .programme-heading,.water-world .film-heading{display:block;margin-bottom:32px}
+ .water-world .offers-heading h2,.water-world .programme h2,.water-world .film h2,.water-world .contact-section h2{font-size:clamp(46px,13vw,70px);line-height:1.06;overflow-wrap:anywhere}
+ .water-world .offers-heading>.chapter-number{margin-bottom:22px}.water-world .offers-heading>p:last-child,.water-world .film-heading>p,.water-world .programme-heading>p{font-size:13px;line-height:1.9;margin-top:25px}
+ .water-world .trip-grid{grid-template-columns:minmax(0,1fr);gap:38px}.water-world .trip-card{min-height:330px}.water-world .trip-image{aspect-ratio:1.06}.water-world .trip-copy{padding:65px 23px 25px}.water-world .trip-copy h3{font-size:36px}.water-world .trip-copy p{font-size:12px}
+ .water-world .trip-card:nth-child(even){margin-left:7%}.water-world .trip-card:nth-child(odd){margin-right:7%}.water-world .trip-card:nth-child(4) .trip-image{aspect-ratio:1.06}
+ .water-world .film-frame{aspect-ratio:4/3}.water-world .film-caption{font-size:9px;line-height:1.8}
+ .water-world #programme-list{grid-template-columns:1fr;gap:26px}.water-world .programme-group:last-child{grid-column:auto}.water-world .programme-group{padding:25px 22px}.water-world .programme-note{font-size:10px}
+ .water-world .contact-section{grid-template-columns:1fr;gap:45px}.water-world .contact-copy{padding:0}.water-world .direct-contact a{font-size:31px}.water-world .enquiry-form{padding:26px 20px}.water-world .enquiry-form h3{font-size:34px}.water-world .contact-copy>p:not(.chapter-number){font-size:13px}
+ .water-world footer{padding:35px 6% 110px;display:flex;flex-direction:column;align-items:flex-start;gap:25px}.water-world footer .brand img{width:160px}.water-world footer p{max-width:none}.water-world footer>a:last-child{font-size:13px}
+ .water-world .water-studio{bottom:max(12px,env(safe-area-inset-bottom));gap:9px;padding:7px 11px;max-width:96vw}.water-world .water-studio button,.river-return{font-size:10px}
+ html[lang=ar] .water-world .chapter h2,html[lang=ar] .water-world .offers-heading h2,html[lang=ar] .water-world .programme h2,html[lang=ar] .water-world .contact-section h2{font-family:Tahoma,Arial,sans-serif;font-size:40px;line-height:1.5;letter-spacing:0}
+ html[lang=ja] .water-world h2,html[lang=zh] .water-world h2{font-size:40px;line-height:1.4}
+}
+@media(max-width:680px){.water-world .header .brand{padding:7px 9px}.water-world .header .brand img{width:125px;margin:0}}
+@media(max-width:360px){.water-world .header{padding-inline:4%;gap:6px}.water-world .header .brand img{width:106px}.water-world .header-tools{gap:6px}.water-world .header .outline{padding:8px}}
+.water-world.water-fallback{animation:water-drift 28s linear infinite;background-attachment:fixed}
+@keyframes water-drift{to{background-position:80px 800px}}
+@media(prefers-reduced-motion:reduce){.water-world .photo,.water-world .trip-card{transform:none!important}.water-world .photo img{transition:none}}
