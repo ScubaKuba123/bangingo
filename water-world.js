@@ -7,10 +7,10 @@
   const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),mix=(a,b,t)=>a+(b-a)*t;
   // Document-relative depth remains consistent after translation and on mobile.
   const depthStops=[
-    {at:0,deep:[.012,.14,.20],light:[.12,.66,.63],sun:[1,.95,.79]},
-    {at:.28,deep:[.012,.12,.19],light:[.055,.40,.46],sun:[.95,.97,.90]},
-    {at:.62,deep:[.009,.065,.14],light:[.037,.23,.38],sun:[.83,.92,1]},
-    {at:1,deep:[.006,.025,.075],light:[.027,.105,.24],sun:[.75,.85,1]}
+    {at:0,deep:[.018,.12,.17],light:[.16,.57,.55],sun:[.94,.98,1]},
+    {at:.28,deep:[.014,.10,.16],light:[.07,.34,.41],sun:[.92,.96,1]},
+    {at:.62,deep:[.011,.055,.11],light:[.045,.20,.31],sun:[.83,.92,1]},
+    {at:1,deep:[.009,.024,.052],light:[.025,.09,.17],sun:[.75,.85,1]}
   ];
   const palettes={
     lagoon:{deep:[.012,.14,.20],light:[.12,.66,.63],sun:[1,.95,.79]},

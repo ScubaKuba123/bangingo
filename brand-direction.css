@@ -1,0 +1,95 @@
+/* Bangingo's own palette; editorial hierarchy informed by Monks' public work. */
+@font-face{font-family:"Space Grotesk";font-style:normal;font-weight:300 700;font-display:swap;src:url("assets/space-grotesk-variable.woff2") format("woff2")}
+html[data-brand=studio]{--display:"Space Grotesk",Manrope,Arial,sans-serif;--sans:Manrope,Arial,sans-serif;--serif:var(--display);--brand-red:#e61635;--brand-paper:#eff0ec;--brand-ink:#202328;--brand-muted:#4c565c}
+html[data-brand=studio] body{font-family:var(--sans)}
+html[data-brand=studio] :is(button,a,input,select,textarea):focus-visible{outline:2px solid #ff5b70;outline-offset:5px}
+.water-world{--cream:#f1f3ef;--gold:#c8d9d8;--ocean:#f1f3ef;--clay:var(--brand-red);--muted:#d6e0de;--surface:#eff0ec;--serif:var(--display)}
+.water-world .world,.water-world .world.intro,.water-world.still .world{--gold:#c8d9d8;--muted:#d6e0de}
+.water-world .header{background:#101c22c9;border-bottom-color:#edf2ee24;backdrop-filter:blur(18px)}
+.water-world .brand{background:var(--brand-paper);border:0;border-radius:5px;box-shadow:none}
+.water-world .header-contact{border:0;background:none;padding:12px 8px;font-size:12px}
+.water-world .header nav{font-size:12px;font-weight:500}
+.water-world .header :is(select,.outline){background:#16272b44;border-color:#e3e9e237;color:#f1f3ef}
+.water-world .header .count{background:#eef3eb22;color:#f1f3ef}
+.water-world .intro-copy{width:46%;top:21%}
+.water-world .intro h1{font-family:var(--display);font-size:clamp(76px,7.8vw,126px);font-weight:600;line-height:.98;letter-spacing:-.065em;color:#f1f3ef;text-shadow:0 2px 24px #07171c45;margin-bottom:30px}
+.water-world .intro h1 em{font-style:normal;font-weight:600;color:inherit}.water-world .brand-dot{color:#ff536c}
+.water-world .intro-copy p:not(.eyebrow){font-size:16px;line-height:1.75;color:#e0e9e4;max-width:340px;text-shadow:none}
+.water-world .intro-copy .outline{background:var(--brand-red);border-color:var(--brand-red);color:#fff;font:600 13px/1.4 var(--sans);border-radius:50px;padding:18px 25px;gap:30px}
+.water-world .intro-copy .outline:hover{background:#bd102b;border-color:#bd102b;color:#fff}
+.water-world .hero-contact{font-size:12px;color:#eef2ed;margin-left:20px;text-underline-offset:5px}
+.water-world .hero-contact:hover{text-decoration:underline}
+.water-world .scroll-cue{color:#dce5e0}.water-world .scroll-cue b{background:#dce5e044}.water-world .scroll-cue b:before{background:#ff536c}
+.water-world .chapter-number{color:#d3e1dc;font-weight:600;letter-spacing:.13em}
+.water-world :is(.chapter h2,.beyond h2,.offers-heading h2,.film h2,.programme h2,.contact-section h2){font-family:var(--display);font-size:clamp(48px,5.6vw,84px);font-weight:500;line-height:1.04;letter-spacing:-.055em;text-shadow:none;text-wrap:balance;overflow-wrap:anywhere}
+.water-world main h2 em,.water-world .offers-heading h2 em,.water-world .chapter h2 em{font-style:normal;font-weight:500;color:#bfd0d0}
+.water-world .chapter-copy p,.water-world .offers-heading>p:last-child,.water-world .film-heading>p,.water-world .programme-heading>p{color:#dce6e0;font-size:14px;line-height:1.85;text-shadow:none}
+.water-world .photo{border-color:#f1f3ec65;box-shadow:0 20px 42px #07161c55;background:#102b31}
+.water-world .photo .caption{background:linear-gradient(transparent,#101d25e8);color:#f1f3ef}
+.water-world .intro .photo .caption{background:linear-gradient(transparent,#101d25e8)}
+.water-world .photo .caption strong,.water-world .intro .photo .caption strong{font:500 clamp(20px,1.9vw,29px)/1.12 var(--display);letter-spacing:-.035em}
+.water-world .photo .caption small,.water-world .intro .photo .caption small{font:500 9px/1.6 var(--sans);letter-spacing:.04em;color:#e2e7e0}
+.water-world .photo .added{background:#eff0ec;color:#202328}
+.water-world .chapter-bottom{border-color:#e3ece333}.water-world .chapter-bottom :is(span,a){color:#d7e3df}
+.water-world .trip-card{background:#11232a;border-color:#eef2e64d;box-shadow:0 15px 35px #06161f38}
+.water-world .trip-index{background:#eff0ec;color:#202328;font-weight:600}
+.water-world .trip-copy{background:linear-gradient(transparent,#111e28f5 53%)}
+.water-world .trip-copy h3{font:500 clamp(24px,2.35vw,34px)/1.08 var(--display);letter-spacing:-.04em}
+.water-world .trip-copy p{color:#dce5de;font-size:12px;line-height:1.7}.water-world .trip-link{color:#f1f3ef;font-size:11px}
+.water-world .programme-note,.water-world .film-caption{color:#d2dedb}
+.water-world .film-frame{border-color:#eff0ec55}
+.water-world .programme-group{background:#14232cbd;border-color:#e3eae12e;box-shadow:none}
+.water-world .programme-group h3{font:500 26px/1.1 var(--display);letter-spacing:-.035em;color:#f1f3ef}
+.water-world .programme-item{color:#eef1ec;border-color:#e6eee12b}
+.water-world .programme-item small{font:400 18px/1.35 var(--display);letter-spacing:-.02em;color:#b9c9c8}
+.water-world .contact-copy>p:not(.chapter-number){color:#dce6df}
+.water-world .direct-contact a{font:500 clamp(19px,2.15vw,32px)/1.5 var(--display);letter-spacing:-.04em;border-color:#e7eee136;color:#eff2ed}
+.water-world .direct-contact a span{color:#ff536c}
+.water-world .contact-tools{--ocean:#202328;--muted:#4c565c;--clay:#cf1230;--paper:#eff0ec;color:#eff0ec}
+.water-world :is(.enquiry-form,.signal-card){background:#eff0ec;color:#202328;border-color:#343c4026;box-shadow:0 18px 48px #06141c44}
+.water-world :is(.enquiry-form h3,.signal-head h3){font:500 32px/1.1 var(--display);letter-spacing:-.045em}
+.water-world .enquiry-form :is(input,select,textarea){background:#f8f9f5;border-color:#2023284d;color:#202328;font-size:14px}
+.water-world .enquiry-form select option{background:#f8f9f5;color:#202328}
+.water-world :is(.enquiry-form .solid,.signal-card .solid){background:var(--brand-red);color:white;border-radius:40px;font-weight:600}
+.water-world :is(.signal-card .solid:hover,.enquiry-form .solid:hover){background:#bd102b}
+.water-world .enquiry-note{color:#4c565c}.water-world .signal-card .text-button{color:#202328}
+.water-world dialog{--ocean:#f1f3ef;--muted:#cedbd8;--clay:#ff536c;--surface:#14232c;background:#14232c;color:#f1f3ef}
+.water-world dialog :is(h2,h3){font-family:var(--display);font-weight:500;letter-spacing:-.045em;line-height:1.08}
+.water-world dialog em{font-style:normal;color:#c2d1d0}
+.water-world dialog .close{background:#14232c;color:#f1f3ef;border-color:#eff0ec44}
+.water-world dialog .solid{background:var(--brand-red);color:#fff}.water-world dialog .outline{border-color:#dce6dd88;color:#edf2ec}
+.water-world .toast{background:#eff0ec;color:#202328}
+.water-world footer{background:#101d2780;border-color:#eef2e72b;color:#eef2ec}.water-world footer p{color:#cad9d5}
+.water-world .water-studio{background:#14232cdb;color:#eff0ec;border-color:#e7eee138}
+.water-world .water-studio button[data-water-mode=auto][aria-pressed=true]{color:#f1f3ef}
+.water-world .water-studio button[aria-pressed=true]{box-shadow:0 0 0 2px #eff0ec}
+.water-world.water-production .water-studio{display:none}.water-world.water-production footer{padding-bottom:45px}.water-world.water-production .toast{bottom:24px}
+/* The same type and colour system continues onto the existing trip-detail pages. */
+.package-page{--paper:#eff0ec;--surface:#f8f9f5;--ocean:#202328;--cream:#202328;--muted:#4c565c;--clay:#cf1230;--gold:#cf1230;--serif:var(--display);color:#202328;background:#eff0ec}
+html[data-brand=studio] body.package-page{background:#eff0ec}
+.package-page .header{background:#eff0ecf2;border-color:#20232820}.package-page .header nav a{color:#202328}.package-page .header-contact{background:transparent;border:0}
+.package-page :is(h1,h2,h3,.package-hero h1,.package-story h2,.contact-section h2,.enquiry-form h3){font-family:var(--display);font-weight:500;line-height:1.04;letter-spacing:-.05em}
+.package-page .package-hero h1{font-size:clamp(52px,6.2vw,94px)}
+.package-page .package-hero .tagline{font:500 clamp(23px,2.6vw,36px)/1.25 var(--display);letter-spacing:-.035em;color:#cf1230}
+.package-page em{font-style:normal;color:#cf1230}.package-page .package-story{background:#f8f9f5;border-color:#20232820}
+.package-page .solid{background:#d31231;color:#fff;border-radius:40px}.package-page .direct-contact{border:0;background:none;padding:0}
+.package-page .direct-contact a{font-family:var(--display);letter-spacing:-.04em;color:#202328}
+.package-page .enquiry-form{background:#f8f9f5;border-color:#20232833}.package-page .enquiry-form :is(input,select,textarea){background:#fff;color:#202328;border-color:#20232855}
+.package-page footer{border-color:#20232822}.package-page footer p{color:#4c565c}
+@media(min-width:1650px){.water-world .intro h1{font-size:145px}.water-world .intro-copy{top:21%}}
+@media(min-width:681px) and (max-width:1100px){.water-world .intro h1{font-size:8.2vw}.water-world .intro-copy{width:48%;top:23%}.water-world :is(.chapter h2,.beyond h2){font-size:6.2vw}.water-world .hero-contact{display:block;margin:18px 0}.water-world .contact-section h2{font-size:5.7vw}.water-world .enquiry-form h3{font-size:28px}.water-world .direct-contact a{font-size:2.3vw}}
+@media(max-width:680px){
+ .water-world .header{background:#101e24e8}.water-world .header-contact{border:0;padding:8px 0 0;font-size:11px}
+ .water-world .intro-copy{width:100%;top:auto}.water-world .intro h1{font-size:clamp(55px,15.6vw,100px);line-height:1.02;letter-spacing:-.065em;margin-bottom:26px}
+ .water-world .intro-copy p:not(.eyebrow){font-size:13px}.water-world .intro-copy .outline{font-size:12px;padding:17px 20px;gap:20px}.water-world .hero-contact{font-size:11px;margin-left:13px}
+ .water-world :is(.chapter h2,.beyond h2,.offers-heading h2,.film h2,.programme h2,.contact-section h2){font-size:clamp(35px,9.5vw,58px);line-height:1.08;letter-spacing:-.05em}
+ .water-world .photo .caption strong,.water-world .intro .photo .caption strong{font-size:21px;line-height:1.14}
+ .water-world .chapter .photo .caption strong{font-size:19px}.water-world .photo .caption small{font-size:8px}
+ .water-world .trip-copy h3{font-size:29px}.water-world .programme-group h3{font-size:25px}
+ .water-world .enquiry-form h3,.water-world .signal-head h3{font-size:28px}.water-world .direct-contact a{font-size:clamp(20px,6.4vw,29px)}
+ .water-world .programme-item small{font-size:19px}.water-world .chapter-bottom>span{font-size:8px}.water-world .chapter-bottom a{font-size:11px}
+ .package-page .package-hero h1{font-size:clamp(40px,12vw,62px)}.package-page .package-story h2,.package-page .contact-section h2{font-size:38px}.package-page .enquiry-form h3{font-size:28px}
+}
+html[lang=ar][data-brand=studio] :is(h1,h2,h3,.caption strong,.programme-item small){font-family:Tahoma,Arial,sans-serif;letter-spacing:0;line-height:1.45}
+html[lang=ar][data-brand=studio] #main-title{font-family:var(--display);letter-spacing:-.065em;line-height:1.02}
+html[lang=ja][data-brand=studio] :is(h2,h3,.caption strong),html[lang=zh][data-brand=studio] :is(h2,h3,.caption strong){font-family:Manrope,"Noto Sans",Arial,sans-serif;letter-spacing:-.025em;line-height:1.4}
