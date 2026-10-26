@@ -2,8 +2,8 @@
 :root{color-scheme:dark;--paper:#092d38;--ocean:#fff7e9;--clay:#efbf82;--cream:#fff7e9;--gold:#efbf82;--muted:#d2e0df;--surface:#faf4e9;--ink:#072c36}
 html{scroll-padding-top:110px}
 body.water-world{background:#073b43 url('assets/water-world-surface.webp') center/800px;color:var(--cream)}
-#water-surface,#water-objects,.water-shade{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
-#water-surface{z-index:0}#water-objects{z-index:1}.water-shade{z-index:1;background:linear-gradient(90deg,#001c2c29,transparent 70%)}
+#water-surface,.water-shade{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+#water-surface{z-index:0}.water-shade{z-index:1;background:linear-gradient(90deg,#001c2c29,transparent 70%)}
 .water-world main,.water-world footer{z-index:2}.water-world main{overflow:clip}
 .water-world .header{background:#062a348c;backdrop-filter:blur(20px);border-bottom:1px solid #f9eddb24;height:94px;padding-inline:4.5%;gap:22px}
 .water-world .brand{background:#fff9ef;border:1px solid #fff4df88;border-radius:7px;padding:10px 13px;box-shadow:0 4px 18px #001e2920}
@@ -94,7 +94,7 @@ body.water-world{background:#073b43 url('assets/water-world-surface.webp') cente
  .water-world .intro h1{font-size:clamp(72px,21vw,126px);line-height:.85;margin-bottom:28px;letter-spacing:-.05em}
  .water-world .intro-copy p:not(.eyebrow){font-size:13px;max-width:270px;line-height:1.9;margin:0 0 22px}
  .water-world .intro-copy .outline{padding:15px 19px;gap:20px;font-size:12px}.water-world .hero-contact{display:inline-flex;margin-left:14px;font-size:10px}
- .water-world .intro .photo-world{height:555px;margin-top:130px;position:relative;width:100%;display:block}
+ .water-world .intro .photo-world{height:555px;margin-top:65px;position:relative;width:100%;display:block}
  .water-world .intro .photo:nth-child(1){left:auto;right:5%;top:0;width:77%;height:270px}
  .water-world .intro .photo:nth-child(2){left:auto;right:3%;top:295px;width:44%;height:225px}
  .water-world .intro .photo:nth-child(3){left:4%;right:auto;top:280px;width:47%;height:210px}
@@ -125,5 +125,6 @@ body.water-world{background:#073b43 url('assets/water-world-surface.webp') cente
 @media(max-width:680px){.water-world .header .brand{padding:7px 9px}.water-world .header .brand img{width:125px;margin:0}}
 @media(max-width:360px){.water-world .header{padding-inline:4%;gap:6px}.water-world .header .brand img{width:106px}.water-world .header-tools{gap:6px}.water-world .header .outline{padding:8px}}
 .water-world.water-fallback{animation:water-drift 28s linear infinite;background-attachment:fixed}
+.water-world.water-fallback .water-shade{background:linear-gradient(90deg,#001c2c40,transparent 70%),var(--depth-tint,#073b43);opacity:var(--depth-shade,.08)}
 @keyframes water-drift{to{background-position:80px 800px}}
 @media(prefers-reduced-motion:reduce){.water-world .photo,.water-world .trip-card{transform:none!important}.water-world .photo img{transition:none}}
