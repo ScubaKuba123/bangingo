@@ -5,12 +5,15 @@ html[data-brand=studio] body{font-family:var(--sans)}
 html[data-brand=studio] :is(button,a,input,select,textarea):focus-visible{outline:2px solid #ff5b70;outline-offset:5px}
 .water-world{--cream:#f1f3ef;--gold:#c8d9d8;--ocean:#f1f3ef;--clay:var(--brand-red);--muted:#d6e0de;--surface:#eff0ec;--serif:var(--display)}
 .water-world .world,.water-world .world.intro,.water-world.still .world{--gold:#c8d9d8;--muted:#d6e0de}
-.water-world .header{background:#101c22c9;border-bottom-color:#edf2ee24;backdrop-filter:blur(18px)}
+.water-world .header{background:#eff0ecf5;border-bottom-color:#20232820;backdrop-filter:blur(18px);color:#202328;color-scheme:light}
+.water-world .header :is(nav a,.header-contact,.header-contact a,.outline){color:#202328}
 .water-world .brand{background:var(--brand-paper);border:0;border-radius:5px;box-shadow:none}
 .water-world .header-contact{border:0;background:none;padding:12px 8px;font-size:12px}
 .water-world .header nav{font-size:12px;font-weight:500}
-.water-world .header :is(select,.outline){background:#16272b44;border-color:#e3e9e237;color:#f1f3ef}
-.water-world .header .count{background:#eef3eb22;color:#f1f3ef}
+.water-world .header :is(select,.outline){background:#f8f9f5;border-color:#20232830;color:#202328}
+.water-world .header select option{background:#f8f9f5;color:#202328}
+.water-world .header .language:before,.water-world .header .language:after{color:#202328}
+.water-world .header .count{background:#2023280d;color:#202328}
 .water-world .intro-copy{width:46%;top:21%}
 .water-world .intro h1{font-family:var(--display);font-size:clamp(76px,7.8vw,126px);font-weight:600;line-height:.98;letter-spacing:-.065em;color:#f1f3ef;text-shadow:0 2px 24px #07171c45;margin-bottom:30px}
 .water-world .intro h1 em{font-style:normal;font-weight:600;color:inherit}.water-world .brand-dot{color:#ff536c}
@@ -79,7 +82,7 @@ html[data-brand=studio] body.package-page{background:#eff0ec}
 @media(min-width:1650px){.water-world .intro h1{font-size:145px}.water-world .intro-copy{top:21%}}
 @media(min-width:681px) and (max-width:1100px){.water-world .intro h1{font-size:8.2vw}.water-world .intro-copy{width:48%;top:23%}.water-world :is(.chapter h2,.beyond h2){font-size:6.2vw}.water-world .hero-contact{display:block;margin:18px 0}.water-world .contact-section h2{font-size:5.7vw}.water-world .enquiry-form h3{font-size:28px}.water-world .direct-contact a{font-size:2.3vw}}
 @media(max-width:680px){
- .water-world .header{background:#101e24e8}.water-world .header-contact{border:0;padding:8px 0 0;font-size:11px}
+ .water-world .header{background:#eff0ecfa}.water-world .header-contact{border:0;padding:8px 0 0;font-size:11px}
  .water-world .intro-copy{width:100%;top:auto}.water-world .intro h1{font-size:clamp(55px,15.6vw,100px);line-height:1.02;letter-spacing:-.065em;margin-bottom:26px}
  .water-world .intro-copy p:not(.eyebrow){font-size:13px}.water-world .intro-copy .outline{font-size:12px;padding:17px 20px;gap:20px}.water-world .hero-contact{font-size:11px;margin-left:13px}
  .water-world :is(.chapter h2,.beyond h2,.offers-heading h2,.film h2,.programme h2,.contact-section h2){font-size:clamp(35px,9.5vw,58px);line-height:1.08;letter-spacing:-.05em}
@@ -93,3 +96,8 @@ html[data-brand=studio] body.package-page{background:#eff0ec}
 html[lang=ar][data-brand=studio] :is(h1,h2,h3,.caption strong,.programme-item small){font-family:Tahoma,Arial,sans-serif;letter-spacing:0;line-height:1.45}
 html[lang=ar][data-brand=studio] #main-title{font-family:var(--display);letter-spacing:-.065em;line-height:1.02}
 html[lang=ja][data-brand=studio] :is(h2,h3,.caption strong),html[lang=zh][data-brand=studio] :is(h2,h3,.caption strong){font-family:Manrope,"Noto Sans",Arial,sans-serif;letter-spacing:-.025em;line-height:1.4}
+/* A dedicated open-water lane keeps the yacht clear of every translated card. */
+.water-world{--yacht-lane:56px}
+.water-world main,.water-world footer{width:calc(100% - var(--yacht-lane));margin-right:var(--yacht-lane)}
+#water-yacht{position:fixed;inset:0;width:100%;height:100%;z-index:4;pointer-events:none}
+@media(max-width:680px){.water-world .intro h1{font-size:clamp(50px,14.8vw,92px)}.water-world .direct-contact a{font-size:clamp(18px,5.7vw,26px)}}
