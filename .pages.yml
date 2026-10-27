@@ -1,12 +1,12 @@
 content:
   - name: homepage
-    label: Homepage text
+    label: Teksty strony głównej
     type: file
     path: content/homepage.json
     format: json
     fields:
       - name: pl
-        label: Polish
+        label: Polski
         type: object
         fields:
           - { name: hero, label: Hero, type: object, fields: [
@@ -61,7 +61,7 @@ content:
               { name: submitCta, label: Form button, type: string, required: true }
             ] }
       - name: en
-        label: English
+        label: Angielski
         type: object
         fields:
           - { name: hero, label: Hero, type: object, fields: [
@@ -116,14 +116,11 @@ content:
               { name: submitCta, label: Form button, type: string, required: true }
             ] }
   - name: packages
-    label: Package text
+    label: Teksty pakietów
     type: file
     path: content/packages.json
     format: json
-    list:
-      collapsible:
-        collapsed: true
-        summary: "{fields.pl.title} / {fields.en.title}"
+    list: true
     fields:
       - { name: id, label: Package ID, type: string, readonly: true }
       - name: pl
