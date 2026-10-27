@@ -1,33 +1,55 @@
 (() => {
   'use strict';
-  const text=value=>String(value??'').trim();
-  const heading=(line,accent)=>`${text(line)}<br><em>${text(accent)}</em>`;
-  const unexpected=value=>[text(value.line1),text(value.line2)].filter(Boolean).join('<br>')+`<br><em>${text(value.accent)}</em>`;
+  // The CMS stores plain text, never trusted HTML. Markup is produced only here.
+  const plain=value=>String(value??'').trim();
+  const safe=value=>plain(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const heading=(line,accent)=>`${safe(line)}<br><em>${safe(accent)}</em>`;
+  const unexpected=value=>[safe(value.line1),safe(value.line2)].filter(Boolean).join('<br>')+`<br><em>${safe(value.accent)}</em>`;
+  const brandLastLine=value=>{
+    const line=safe(value);
+    return line.endsWith('.')?`${line.slice(0,-1)}<span class="brand-dot">.</span>`:line;
+  };
+  const brandTitle=value=>`${safe(value.line1)}<br>${safe(value.line2)}<br><em>${brandLastLine(value.line3)}</em>`;
+  const originalBrand='Not your<br>ordinary<br><em>night<span class="brand-dot">.</span></em>';
+
   window.BANGINGO_CMS_APPLIED=Promise.all([
-    fetch('content/homepage.json',{cache:'no-store'}).then(response=>response.ok?response.json():Promise.reject(Error(response.status))),
-    fetch('content/packages.json',{cache:'no-store'}).then(response=>response.ok?response.json():Promise.reject(Error(response.status)))
+    fetch('content/homepage.json',{cache:'no-store'}).then(r=>r.ok?r.json():Promise.reject(Error('homepage '+r.status))),
+    fetch('content/packages.json',{cache:'no-store'}).then(r=>r.ok?r.json():Promise.reject(Error('packages '+r.status)))
   ]).then(([home,packages])=>{
+    if(!Array.isArray(packages))throw Error('Invalid package content');
     for(const locale of ['pl','en']){
-      const source=home[locale],dictionary=window.BANGINGO_LOCALES[locale],ui=window.BANGINGO_OFFER_UI[locale];
+      const source=home?.[locale],dictionary=window.BANGINGO_LOCALES?.[locale],ui=window.BANGINGO_OFFER_UI?.[locale];
+      if(!source||!dictionary||!ui||!source.hero||!source.contact)throw Error('Missing '+locale+' CMS content');
       Object.assign(dictionary,{
-        heroTitle:`${text(source.hero.line1)}<br>${text(source.hero.line2)}<br><em>${text(source.hero.line3)}</em>`,heroSub:text(source.hero.description),explore:text(source.hero.primaryCta),signal:text(source.hero.secondaryCta),
-        h1:heading(source.entrance.line1,source.entrance.accent),p1:text(source.entrance.description),next1:text(source.entrance.nextCta),
-        h2:heading(source.afterDark.line1,source.afterDark.accent),p2:text(source.afterDark.description),next2:text(source.afterDark.nextCta),
-        filmTitle:heading(source.sunset.line1,source.sunset.accent),filmText:text(source.sunset.description),play:text(source.sunset.playCta),
-        h3:unexpected(source.unexpected),p3:text(source.unexpected.description),all:text(source.unexpected.nextCta),
-        programmeTitle:heading(source.programme.line1,source.programme.accent),programmeText:text(source.programme.description),
-        contactTitle:heading(source.contact.line1,source.contact.accent),contactText:text(source.contact.description)
+        heroTitle:brandTitle(source.hero),heroSub:safe(source.hero.description),explore:safe(source.hero.primaryCta),signal:safe(source.hero.secondaryCta),
+        h1:heading(source.entrance.line1,source.entrance.accent),p1:safe(source.entrance.description),next1:safe(source.entrance.nextCta),
+        h2:heading(source.afterDark.line1,source.afterDark.accent),p2:safe(source.afterDark.description),next2:safe(source.afterDark.nextCta),
+        filmTitle:heading(source.sunset.line1,source.sunset.accent),filmText:safe(source.sunset.description),play:safe(source.sunset.playCta),
+        h3:unexpected(source.unexpected),p3:safe(source.unexpected.description),all:safe(source.unexpected.nextCta),
+        programmeTitle:heading(source.programme.line1,source.programme.accent),programmeText:safe(source.programme.description),
+        contactTitle:heading(source.contact.line1,source.contact.accent),contactText:safe(source.contact.description)
       });
-      Object.assign(ui,{heading:heading(source.packages.line1,source.packages.accent),lead:text(source.packages.description),read:text(source.packages.cardCta),formTitle:text(source.contact.formTitle),prepare:text(source.contact.submitCta)});
+      Object.assign(ui,{
+        heading:heading(source.packages.line1,source.packages.accent),lead:safe(source.packages.description),read:safe(source.packages.cardCta),
+        formTitle:safe(source.contact.formTitle),prepare:safe(source.contact.submitCta)
+      });
     }
-    for(const item of packages)for(const locale of ['pl','en']){
-      const target=window.BANGINGO_OFFERS.copy[locale]?.[item.id],source=item[locale];
-      if(target&&source)Object.assign(target,{title:text(source.title),tagline:text(source.tagline),intro:text(source.intro),story:text(source.description)});
+    const known=new Set(window.BANGINGO_OFFERS.packages.map(p=>p.id));
+    const ids=new Set();
+    for(const item of packages){
+      if(!known.has(item.id)||ids.has(item.id))throw Error('Invalid or duplicate package ID');
+      ids.add(item.id);
+      for(const locale of ['pl','en']){
+        const target=window.BANGINGO_OFFERS.copy[locale]?.[item.id],source=item[locale];
+        if(!target||!source)throw Error('Incomplete package: '+item.id+'/'+locale);
+        Object.assign(target,{title:plain(source.title),tagline:plain(source.tagline),intro:plain(source.intro),story:plain(source.description)});
+      }
     }
-    for(const locale of window.BANGINGO_OFFERS.languages)window.BANGINGO_LOCALES[locale].heroTitle=window.BANGINGO_LOCALES[locale].heroTitle||'Not your<br>ordinary<br><em>night.</em>';
+    if(ids.size!==known.size)throw Error('Package count mismatch');
+    for(const locale of window.BANGINGO_OFFERS.languages)window.BANGINGO_LOCALES[locale].heroTitle ||= originalBrand;
     document.documentElement.dataset.cmsContent='ready';
   }).catch(error=>{
-    for(const locale of window.BANGINGO_OFFERS.languages)window.BANGINGO_LOCALES[locale].heroTitle='Not your<br>ordinary<br><em>night.</em>';
+    for(const locale of window.BANGINGO_OFFERS.languages)window.BANGINGO_LOCALES[locale].heroTitle ||= originalBrand;
     document.documentElement.dataset.cmsContent='fallback';
     console.warn('CMS text fallback is active.',error.message);
   });
