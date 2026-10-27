@@ -4,13 +4,14 @@
   const plain=value=>String(value??'').trim();
   const safe=value=>plain(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const heading=(line,accent)=>`${safe(line)}<br><em>${safe(accent)}</em>`;
-  const unexpected=value=>[safe(value.line1),safe(value.line2)].filter(Boolean).join('<br>')+`<br><em>${safe(value.accent)}</em>`;
+  const unexpected=value=>`${safe(value.line1)}<br>${safe(value.line2)?safe(value.line2)+' ':''}<em>${safe(value.accent)}</em>`;
   const brandLastLine=value=>{
     const line=safe(value);
     return line.endsWith('.')?`${line.slice(0,-1)}<span class="brand-dot">.</span>`:line;
   };
   const brandTitle=value=>`${safe(value.line1)}<br>${safe(value.line2)}<br><em>${brandLastLine(value.line3)}</em>`;
   const originalBrand='Not your<br>ordinary<br><em>night<span class="brand-dot">.</span></em>';
+  const lines=value=>safe(value).replace(/\r?\n/g,'<br>');
 
   window.BANGINGO_CMS_APPLIED=Promise.all([
     fetch('content/homepage.json',{cache:'no-store'}).then(r=>r.ok?r.json():Promise.reject(Error('homepage '+r.status))),
@@ -24,9 +25,9 @@
         heroTitle:brandTitle(source.hero),heroSub:safe(source.hero.description),explore:safe(source.hero.primaryCta),signal:safe(source.hero.secondaryCta),
         h1:heading(source.entrance.line1,source.entrance.accent),p1:safe(source.entrance.description),next1:safe(source.entrance.nextCta),
         h2:heading(source.afterDark.line1,source.afterDark.accent),p2:safe(source.afterDark.description),next2:safe(source.afterDark.nextCta),
-        filmTitle:heading(source.sunset.line1,source.sunset.accent),filmText:safe(source.sunset.description),play:safe(source.sunset.playCta),
+        filmTitle:heading(source.sunset.line1,source.sunset.accent),filmText:lines(source.sunset.description),play:safe(source.sunset.playCta),
         h3:unexpected(source.unexpected),p3:safe(source.unexpected.description),all:safe(source.unexpected.nextCta),
-        programmeTitle:heading(source.programme.line1,source.programme.accent),programmeText:safe(source.programme.description),
+        programmeTitle:heading(source.programme.line1,source.programme.accent),programmeText:lines(source.programme.description),
         contactTitle:heading(source.contact.line1,source.contact.accent),contactText:safe(source.contact.description)
       });
       Object.assign(ui,{
