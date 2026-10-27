@@ -1,0 +1,107 @@
+{
+  "pl": {
+    "hero": {
+      "line1": "Poland Party stag do weekend corporate events ",
+      "line2": "Gdansk Warsaw Krakow ",
+      "line3": "Business Trips Group nightlife",
+      "description": "In Poland, WE take care of you! ",
+      "primaryCta": "Znajdź swój wyjazd",
+      "secondaryCta": "Nadaj sygnał ↗"
+    },
+    "packages": {
+      "line1": "Siedem pomysłów.",
+      "accent": "Twoja historia.",
+      "description": "Spotkania, wspólny weekend albo noc, której nikt nie zapomni. Wybierz punkt wyjścia. Resztę zaplanujemy razem.",
+      "cardCta": "Poznaj plan"
+    },
+    "entrance": {
+      "line1": "Zrób dobre",
+      "accent": "wejście.",
+      "description": "Prywatny transfer, Wasz stolik, pierwszy toast. Reszta przyjdzie sama.",
+      "nextCta": "Podążaj za nocą"
+    },
+    "afterDark": {
+      "line1": "Jeszcze",
+      "accent": "jeden utwór.",
+      "description": "Klub, hostessy, degustacja. Wieczór w Waszym rytmie.",
+      "nextCta": "Złap ostatnie światło"
+    },
+    "sunset": {
+      "line1": "Zostań na",
+      "accent": "zachód słońca.",
+      "description": "Dwanaście sekund na wodzie.\nReszta świata może poczekać.",
+      "playCta": "Odtwórz film"
+    },
+    "unexpected": {
+      "line1": "Skręć",
+      "line2": "w",
+      "accent": "nieznane.",
+      "description": "Terenówka, lot balonem, tor wyścigowy. Dzień też ma swoje pokusy.",
+      "nextCta": "Wszystkie 15 atrakcji"
+    },
+    "programme": {
+      "line1": "Piętnaście sposobów",
+      "accent": "na Wasz wieczór.",
+      "description": "Wybierz atrakcje, które pasują do Was.\nPołączymy je w jeden plan."
+    },
+    "contact": {
+      "line1": "Twój pomysł.",
+      "accent": "Nasza kolej.",
+      "description": "Opowiedz nam o swoim wyjeździe. Ułożymy propozycję wokół Waszych planów, ludzi i okazji.",
+      "formTitle": "Kilka szczegółów. I ruszamy.",
+      "submitCta": "Przygotuj wiadomość ↗"
+    }
+  },
+  "en": {
+    "hero": {
+      "line1": "Not your",
+      "line2": "ordinary",
+      "line3": "night.",
+      "description": "In Poland, we take care of you.",
+      "primaryCta": "Find your trip",
+      "secondaryCta": "Send a signal ↗"
+    },
+    "packages": {
+      "line1": "Seven ways in.",
+      "accent": "Your own story.",
+      "description": "Meetings, a weekend together or a night worth remembering. Pick your starting point. We will plan the rest together.",
+      "cardCta": "Explore the trip"
+    },
+    "entrance": {
+      "line1": "Make an",
+      "accent": "entrance.",
+      "description": "A private arrival, your own table, the first toast. Let the evening unfold.",
+      "nextCta": "Follow the night"
+    },
+    "afterDark": {
+      "line1": "Just one",
+      "accent": "more song.",
+      "description": "Club nights, event hosts, tastings. An evening at your own tempo.",
+      "nextCta": "Catch the last light"
+    },
+    "sunset": {
+      "line1": "Stay for",
+      "accent": "the sunset.",
+      "description": "Twelve seconds on the water.\nThe rest of the world can wait.",
+      "playCta": "Play the film"
+    },
+    "unexpected": {
+      "line1": "Take the",
+      "accent": "unexpected turn.",
+      "description": "4×4 trails, balloon flights, track days. Daylight has its temptations too.",
+      "nextCta": "All 15 experiences"
+    },
+    "programme": {
+      "line1": "Fifteen ways to",
+      "accent": "make it yours.",
+      "description": "Choose the moments that feel like you.\nLet’s bring them into one plan."
+    },
+    "contact": {
+      "line1": "Your idea.",
+      "accent": "Our move.",
+      "description": "Tell us about your trip. We will shape a proposal around your plans, your people and your occasion.",
+      "formTitle": "A few details. Then we’re off.",
+      "submitCta": "Prepare my message ↗"
+    }
+  }
+}

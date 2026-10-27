@@ -1,0 +1,141 @@
+content:
+  - name: homepage
+    label: Teksty strony głównej
+    type: file
+    path: content/homepage.json
+    format: json
+    fields:
+      - name: pl
+        label: Polski
+        type: object
+        fields:
+          - { name: hero, label: Hero, type: object, fields: [
+              { name: line1, label: Heading line 1, type: string, required: true },
+              { name: line2, label: Heading line 2, type: string, required: true },
+              { name: line3, label: Heading line 3, type: string, required: true },
+              { name: description, label: Description, type: text, required: true },
+              { name: primaryCta, label: Main button, type: string, required: true },
+              { name: secondaryCta, label: Secondary button, type: string, required: true }
+            ] }
+          - { name: packages, label: Packages section, type: object, fields: [
+              { name: line1, label: Heading, type: string, required: true },
+              { name: accent, label: Highlighted heading, type: string, required: true },
+              { name: description, label: Description, type: text, required: true },
+              { name: cardCta, label: Package card button, type: string, required: true }
+            ] }
+          - { name: entrance, label: Make an entrance, type: object, fields: [
+              { name: line1, label: Heading, type: string, required: true },
+              { name: accent, label: Highlighted heading, type: string, required: true },
+              { name: description, label: Description, type: text, required: true },
+              { name: nextCta, label: Next button, type: string, required: true }
+            ] }
+          - { name: afterDark, label: After dark, type: object, fields: [
+              { name: line1, label: Heading, type: string, required: true },
+              { name: accent, label: Highlighted heading, type: string, required: true },
+              { name: description, label: Description, type: text, required: true },
+              { name: nextCta, label: Next button, type: string, required: true }
+            ] }
+          - { name: sunset, label: Sunset, type: object, fields: [
+              { name: line1, label: Heading, type: string, required: true },
+              { name: accent, label: Highlighted heading, type: string, required: true },
+              { name: description, label: Description, type: text, required: true },
+              { name: playCta, label: Play button, type: string, required: true }
+            ] }
+          - { name: unexpected, label: Unexpected turn, type: object, fields: [
+              { name: line1, label: Heading line 1, type: string, required: true },
+              { name: line2, label: Heading line 2, type: string },
+              { name: accent, label: Highlighted heading, type: string, required: true },
+              { name: description, label: Description, type: text, required: true },
+              { name: nextCta, label: Next button, type: string, required: true }
+            ] }
+          - { name: programme, label: Programme, type: object, fields: [
+              { name: line1, label: Heading, type: string, required: true },
+              { name: accent, label: Highlighted heading, type: string, required: true },
+              { name: description, label: Description, type: text, required: true }
+            ] }
+          - { name: contact, label: Contact, type: object, fields: [
+              { name: line1, label: Heading, type: string, required: true },
+              { name: accent, label: Highlighted heading, type: string, required: true },
+              { name: description, label: Description, type: text, required: true },
+              { name: formTitle, label: Form heading, type: string, required: true },
+              { name: submitCta, label: Form button, type: string, required: true }
+            ] }
+      - name: en
+        label: Angielski
+        type: object
+        fields:
+          - { name: hero, label: Hero, type: object, fields: [
+              { name: line1, label: Heading line 1, type: string, required: true },
+              { name: line2, label: Heading line 2, type: string, required: true },
+              { name: line3, label: Heading line 3, type: string, required: true },
+              { name: description, label: Description, type: text, required: true },
+              { name: primaryCta, label: Main button, type: string, required: true },
+              { name: secondaryCta, label: Secondary button, type: string, required: true }
+            ] }
+          - { name: packages, label: Packages section, type: object, fields: [
+              { name: line1, label: Heading, type: string, required: true },
+              { name: accent, label: Highlighted heading, type: string, required: true },
+              { name: description, label: Description, type: text, required: true },
+              { name: cardCta, label: Package card button, type: string, required: true }
+            ] }
+          - { name: entrance, label: Make an entrance, type: object, fields: [
+              { name: line1, label: Heading, type: string, required: true },
+              { name: accent, label: Highlighted heading, type: string, required: true },
+              { name: description, label: Description, type: text, required: true },
+              { name: nextCta, label: Next button, type: string, required: true }
+            ] }
+          - { name: afterDark, label: After dark, type: object, fields: [
+              { name: line1, label: Heading, type: string, required: true },
+              { name: accent, label: Highlighted heading, type: string, required: true },
+              { name: description, label: Description, type: text, required: true },
+              { name: nextCta, label: Next button, type: string, required: true }
+            ] }
+          - { name: sunset, label: Sunset, type: object, fields: [
+              { name: line1, label: Heading, type: string, required: true },
+              { name: accent, label: Highlighted heading, type: string, required: true },
+              { name: description, label: Description, type: text, required: true },
+              { name: playCta, label: Play button, type: string, required: true }
+            ] }
+          - { name: unexpected, label: Unexpected turn, type: object, fields: [
+              { name: line1, label: Heading line 1, type: string, required: true },
+              { name: line2, label: Heading line 2, type: string },
+              { name: accent, label: Highlighted heading, type: string, required: true },
+              { name: description, label: Description, type: text, required: true },
+              { name: nextCta, label: Next button, type: string, required: true }
+            ] }
+          - { name: programme, label: Programme, type: object, fields: [
+              { name: line1, label: Heading, type: string, required: true },
+              { name: accent, label: Highlighted heading, type: string, required: true },
+              { name: description, label: Description, type: text, required: true }
+            ] }
+          - { name: contact, label: Contact, type: object, fields: [
+              { name: line1, label: Heading, type: string, required: true },
+              { name: accent, label: Highlighted heading, type: string, required: true },
+              { name: description, label: Description, type: text, required: true },
+              { name: formTitle, label: Form heading, type: string, required: true },
+              { name: submitCta, label: Form button, type: string, required: true }
+            ] }
+  - name: packages
+    label: Teksty pakietów
+    type: file
+    path: content/packages.json
+    format: json
+    list: true
+    fields:
+      - { name: id, label: Package ID, type: string, readonly: true }
+      - name: pl
+        label: Polish
+        type: object
+        fields:
+          - { name: title, label: Title, type: string, required: true }
+          - { name: tagline, label: Short description, type: string, required: true }
+          - { name: intro, label: Introduction, type: text, required: true }
+          - { name: description, label: Full description, type: text, required: true }
+      - name: en
+        label: English
+        type: object
+        fields:
+          - { name: title, label: Title, type: string, required: true }
+          - { name: tagline, label: Short description, type: string, required: true }
+          - { name: intro, label: Introduction, type: text, required: true }
+          - { name: description, label: Full description, type: text, required: true }

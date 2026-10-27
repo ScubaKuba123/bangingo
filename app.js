@@ -1,4 +1,5 @@
-(() => {
+window.BANGINGO_CONTENT_READY||=import('./cms-content.js?v=20261027-text-mvp').then(()=>window.BANGINGO_CMS_APPLIED);
+window.BANGINGO_CONTENT_READY.then(() => {
   'use strict';
   const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
   const items=window.VIP_PROGRAMME, photos=window.VIP_PHOTOS, dictionaries=window.BANGINGO_LOCALES;
@@ -114,7 +115,9 @@
   addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);addEventListener('pointermove',event=>{if(!motion||mobile.matches||event.pointerType==='touch')return;px=(event.clientX/innerWidth-.5)*2;py=(event.clientY/innerHeight-.5)*2;schedule();},{passive:true});
   function translate(){
     document.documentElement.lang=locale;document.documentElement.dir=locale==='ar'?'rtl':'ltr';$('#language').value=window.BangingoLanguage.current.mode==='auto'?'auto':locale;$('.language').dataset.code=locale.toUpperCase();
-    $$('[data-t]').forEach(el=>el.innerHTML=t(el.dataset.t));$$('[data-label]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.label)));
+    $$('[data-t]').forEach(el=>el.innerHTML=t(el.dataset.t));
+    if($('#main-title'))$('#main-title').innerHTML=t('heroTitle');
+    $$('[data-label]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.label)));
     $$('.photo').forEach(el=>{const id=el.dataset.id,isFilm=id==='film',x=isFilm?{category:t('filmNav'),title:t('play')}:itemCopy(id);el.querySelector('small').textContent=x.category;el.querySelector('strong').textContent=x.title;el.setAttribute('aria-label',x.category+' — '+x.title);});
     $('.header .your-night').setAttribute('aria-label',t('yourNight'));$('#language').setAttribute('aria-label',t('language'));video.setAttribute('aria-label',textOnly(t('filmTitle')));
     renderCatalogue();updateSelection();filmState();if(collection.open)renderCollection();if(experience.open)fillExperience(activeId);schedule();
@@ -122,4 +125,4 @@
   window.BangingoLanguage.bind($('#language'));
   window.BangingoLanguage.subscribe(state=>{locale=state.locale;translate();});
   setMotion();
-})();
+});

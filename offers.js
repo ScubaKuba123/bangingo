@@ -1,4 +1,5 @@
-(() => {
+window.BANGINGO_CONTENT_READY||=import('./cms-content.js?v=20261027-text-mvp').then(()=>window.BANGINGO_CMS_APPLIED);
+window.BANGINGO_CONTENT_READY.then(() => {
   'use strict';
   const catalogue=window.BANGINGO_OFFERS, language=window.BangingoLanguage;
   const $=s=>document.querySelector(s), all=s=>[...document.querySelectorAll(s)];
@@ -75,4 +76,4 @@
   }
   if(document.body.classList.contains('package-page'))language.bind($('#language'));
   language.subscribe(state=>{locale=state.locale;render();});
-})();
+});
